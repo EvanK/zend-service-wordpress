@@ -187,6 +187,21 @@ class ZendX_Service_Wordpress
     }
 
     /**
+     * Sets underlying XML-RPC client
+     * @param $client
+     * @return ZendX_Service_Wordpress
+     */
+    public function setXmlRpcClient($client) {
+        if(!($client instanceof Zend_XmlRpc_Client)) {
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('Client provided is not a Zend_XmlRpc_Client');
+        }
+        
+        $this->_client = $client;
+        return $this;
+    }
+
+    /**
      * Retrieves blog descriptive name
      * @return string
      */

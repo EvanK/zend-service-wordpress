@@ -36,15 +36,9 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetRpcClient() {
+    public function testRpcClient() {
         $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
-        $this->wordpress->setXmlRpcClient(new Zend_XmlRpc_Client());
-    }
-
-    public function testSetRpcClient() {
-        $this->assertType(
-            'Zend_XmlRpc_Client',
-            $this->wordpress->getXmlRpcClient()
-        );
+        $this->wordpress->setXmlRpcClient(new Zend_XmlRpc_Client(''));
+        $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
     }
 }

@@ -26,8 +26,9 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 /*
  * Load the user-defined test configuration file, if it exists
  */
-if (is_readable($zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php')) {
-    require_once $zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php';
+$tests = dirname(__FILE__);
+if (is_readable($tests . DIRECTORY_SEPARATOR . 'TestConfiguration.php')) {
+    require_once $tests . DIRECTORY_SEPARATOR . 'TestConfiguration.php';
 } else {
-    require_once $zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php.dist';
+    require_once $tests . DIRECTORY_SEPARATOR . 'TestConfiguration.php.dist';
 }
