@@ -257,6 +257,7 @@ class ZendX_Service_Wordpress
      * Retrieves a post for the given post id
      * @param $id
      * @return array
+     * @throws Zend_XmlRpc_Client_FaultException if no post exists for id
      */
     public function getPost($id) {
         return $this->_client->call('metaWeblog.getPost', array(
