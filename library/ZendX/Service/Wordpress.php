@@ -99,6 +99,30 @@ class ZendX_Service_Wordpress
     }
 
     /**
+     * Retrieves underlying XML-RPC client
+     * @return Zend_XmlRpc_Client
+     */
+    public function getXmlRpcClient()
+    {
+        return $this->_client;
+    }
+
+    /**
+     * Sets underlying XML-RPC client
+     * @param $client
+     * @return ZendX_Service_Wordpress
+     */
+    public function setXmlRpcClient($client) {
+        if(!($client instanceof Zend_XmlRpc_Client)) {
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('Client provided is not a Zend_XmlRpc_Client');
+        }
+        
+        $this->_client = $client;
+        return $this;
+    }
+
+    /**
      * Retrieves XML-RPC url
      * @return string
      */
@@ -178,30 +202,6 @@ class ZendX_Service_Wordpress
     }
 
     /**
-     * Retrieves underlying XML-RPC client
-     * @return Zend_XmlRpc_Client
-     */
-    public function getXmlRpcClient()
-    {
-        return $this->_client;
-    }
-
-    /**
-     * Sets underlying XML-RPC client
-     * @param $client
-     * @return ZendX_Service_Wordpress
-     */
-    public function setXmlRpcClient($client) {
-        if(!($client instanceof Zend_XmlRpc_Client)) {
-            require_once 'Zend/Service/Exception.php';
-            throw new Zend_Service_Exception('Client provided is not a Zend_XmlRpc_Client');
-        }
-        
-        $this->_client = $client;
-        return $this;
-    }
-
-    /**
      * Retrieves blog descriptive name
      * @return string
      */
@@ -211,9 +211,25 @@ class ZendX_Service_Wordpress
 
     /**
      * Retrieves blog url
+     * @return string
      */
     public function getBlogUrl() {
         return $this->_blogUrl;
+    }
+
+    /**
+     * Retrieves count of available posts
+     * @return int
+     */
+    public function getPostCount() {
+        $response = $this->_client->call('mt.getRecentPostTitles', array(
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+            'blogid'        => $this->getBlogId(),
+            'numberOfPosts' => 65536,
+        ));
+        
+        return count($response);
     }
 
     /* @TODO:
