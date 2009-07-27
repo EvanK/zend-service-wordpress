@@ -281,7 +281,44 @@ class ZendX_Service_Wordpress
             return FALSE;
         }
     }
-
+    
+    /**
+     * Retrieves a category by its "categoryId"
+     * @returns array Category
+     */
+    public function getCategory($id) {
+        $categories = $this->getCategories();
+        
+        foreach ($categories as $category) {
+            if ($id === $category['categoryId']) {
+                return $category;
+            }
+        }
+        
+        throw new Zend_Service_Exception(sprintf('Category with id "%s" not found', $id));
+    }
+    
+    /**
+     * Retrieves all categories registered with the blog
+     * @return array categories
+     */
+    public function getCategories() {
+        return $this->_client->call('wp.getCategories', array(
+            'blog_id'   => $this->getBlogId(),
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword()
+        ));
+    }
+    
+    /**
+     * Return the total number of categories
+     * @return int
+     */
+    public function getCategoryCount()
+    {
+        return count( $this->getCategories() );
+    }
+    
     /* @TODO:
     getAuthors()
 

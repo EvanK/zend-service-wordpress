@@ -108,5 +108,20 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($postid, $post['postid']);
         }
     }
+    
+    public function testCategories() {
+        $total = $this->wordpress->getCategoryCount();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
+        $this->assertGreaterThanOrEqual(1, $total);
+        
+        $categories = $this->wordpress->getCategories();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $categories);
+        $this->assertEquals($total, count($categories));
+        
+        $first_category = $categories[0];
+        $category = $this->wordpress->getCategory($first_category['categoryId']);
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $category);
+        $this->assertEquals($category, $first_category);
+    }
 /***/
 }
