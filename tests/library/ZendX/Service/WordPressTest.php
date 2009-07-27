@@ -123,5 +123,20 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $category);
         $this->assertEquals($category, $first_category);
     }
+    
+    public function testTags() {
+        $total = $this->wordpress->getTagCount();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
+        $this->assertGreaterThanOrEqual(1, $total);
+        
+        $tags = $this->wordpress->getTags();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $tags);
+        $this->assertEquals($total, count($tags));
+        
+        $first_tag = $tags[0];
+        $tag = $this->wordpress->getTag($first_tag['tag_id']);
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $tag);
+        $this->assertEquals($tag, $first_tag);
+    }
 /***/
 }

@@ -48,6 +48,12 @@ class ZendX_Service_Wordpress
     protected $_categories;
 
     /**
+     * Tags fetched via getTags()
+     * @var array
+     */
+    protected $_tags;
+
+    /**
      * Constructor
      *
      * @param  string $xmlrpc  XML-RPC url, normally the blog url plus 'xmlrpc.php'
@@ -330,6 +336,53 @@ class ZendX_Service_Wordpress
         return count( $this->getCategories() );
     }
     
+    /**
+     * Retrieves a tag by its "tag_id"
+     * @returns array Tag
+     */
+    public function getTag($id) {
+        $tags = $this->getTags();
+        
+        foreach ($tags as $tag) {
+            if ($id === $tag['tag_id']) {
+                return $tag;
+            }
+        }
+        
+        throw new Zend_Service_Exception(sprintf('Tag with id "%s" not found', $id));
+    }
+    
+    /**
+     * Retrieves all tags registered with the blog
+     * @return array Tags
+     */
+    public function getTags() {
+        // Store categories to speed up subsequent use
+        if (null === $this->_tags) {
+            $this->_tags = $this->_client->call('wp.getTags', array(
+                'blog_id'   => $this->getBlogId(),
+                'username'  => $this->getUsername(),
+                'password'  => $this->getPassword()
+            ));
+        }
+        
+        return $this->_tags;
+    }
+    
+    /**
+     * Return the total number of tags
+     * @return int
+     */
+    public function getTagCount()
+    {
+        return count( $this->getTags() );
+    }
+    
+    /*
+        @TODO: getTagsAsList() - Create associative array of tags with nesting
+                                 based on parentId
+    */
+    
     /* @TODO:
     getAuthors()
 
@@ -342,7 +395,5 @@ class ZendX_Service_Wordpress
         Post
         Page
         Comment
-        Category
-        Tag
     */
 }
