@@ -40,6 +40,12 @@ class ZendX_Service_Wordpress
      * @var Zend_XmlRpc_Client
      */
     protected $_client;
+    
+    /**
+     * Categories fetched via getCategories()
+     * @var array
+     */
+    protected $_categories;
 
     /**
      * Constructor
@@ -303,11 +309,16 @@ class ZendX_Service_Wordpress
      * @return array categories
      */
     public function getCategories() {
-        return $this->_client->call('wp.getCategories', array(
-            'blog_id'   => $this->getBlogId(),
-            'username'  => $this->getUsername(),
-            'password'  => $this->getPassword()
-        ));
+        // Store categories to speed up subsequent use
+        if (null === $this->_categories) {
+            $this->_categories = $this->_client->call('wp.getCategories', array(
+                'blog_id'   => $this->getBlogId(),
+                'username'  => $this->getUsername(),
+                'password'  => $this->getPassword()
+            ));
+        }
+        
+        return $this->_categories;
     }
     
     /**
