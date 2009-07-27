@@ -87,9 +87,26 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     public function testPosts() {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $this->wordpress->getPostCount());
         
-        # @TODO: for 1..5 as N, call getRecentPosts(N), verify at most N posts
+        # test for up to 5 recent posts
+        $postid = NULL;
+        foreach (range(1,5) as $n) {
+            $posts = $this->wordpress->getRecentPosts($n);
+            $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $posts);
+            $this->assertLessThanOrEqual($n, count($posts));
+            
+            # get first available postid
+            if(is_null($postid) && count($posts) > 0) {
+                $postid = $posts[0]['postid'];
+            }
+        }
         
-        # @TODO: getPost(id) using an id from above
+        # get specific post if we have a viable id
+        if(!is_null($postid)) {
+            $this->assertTrue($this->wordpress->hasPost($postid));
+            $post = $this->wordpress->getPost($postid);
+            $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $post);
+            $this->assertEquals($postid, $post['postid']);
+        }
     }
 /***/
 }

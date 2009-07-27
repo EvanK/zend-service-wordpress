@@ -218,18 +218,67 @@ class ZendX_Service_Wordpress
     }
 
     /**
+     * Retrieves N most recent posts
+     * @param $count
+     * @return array
+     */
+    public function getRecentPosts($count) {
+        return $this->_client->call('metaWeblog.getRecentPosts', array(
+            'blogid'        => $this->getBlogId(),
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+            'numberOfPosts' => $count,
+        ));
+    }
+
+    /**
+     * Retrieves minimal information of N most recent posts
+     * @param $count
+     * @return array
+     */
+    public function getRecentPostTitles($count) {
+        return $this->_client->call('mt.getRecentPostTitles', array(
+            'blogid'        => $this->getBlogId(),
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+            'numberOfPosts' => $count,
+        ));
+    }
+
+    /**
      * Retrieves count of available posts
      * @return int
      */
     public function getPostCount() {
-        $response = $this->_client->call('mt.getRecentPostTitles', array(
+        return count( $this->getRecentPostTitles(65536) );
+    }
+
+    /**
+     * Retrieves a post for the given post id
+     * @param $id
+     * @return array
+     */
+    public function getPost($id) {
+        return $this->_client->call('metaWeblog.getPost', array(
+            'postid'        => $id,
             'username'      => $this->getUsername(),
             'password'      => $this->getPassword(),
-            'blogid'        => $this->getBlogId(),
-            'numberOfPosts' => 65536,
         ));
-        
-        return count($response);
+    }
+    
+    /**
+     * Checks whether a post exists with the given post id
+     * @param $id
+     * @return boolean
+     */
+    public function hasPost($id) {
+        try {
+            $this->getPost($id);
+            return TRUE;
+        }
+        catch(Zend_XmlRpc_Client_FaultException $e) {
+            return FALSE;
+        }
     }
 
     /* @TODO:
