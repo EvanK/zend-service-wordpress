@@ -285,7 +285,7 @@ class ZendX_Service_Wordpress
     /* @TODO:
     getAuthors()
 
-    get<UNTI>StatusList()
+    get<UNIT>StatusList()
     get<UNIT>Count()
     get<UNIT>(id)
     get<UNIT>s([id])
@@ -294,6 +294,7 @@ class ZendX_Service_Wordpress
         Post
         Page
         Comment
+        Category
         Tag
     */
 }

@@ -1,0 +1,11 @@
+<phpunit>
+    <testsuite name="My Test Suite">
+        <directory>./</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./library/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
