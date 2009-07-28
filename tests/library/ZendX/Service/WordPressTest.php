@@ -113,10 +113,20 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $posts = $this->wordpress->getRecentPosts(1);
         # skip if no posts in blog
         if(count($posts) < 1) {
-            $this->markTestSkipped();
+            $this->markTestSkipped('No posts to test');
         }
         $categories = $this->wordpress->getPostCategories($posts[0]['postid']);
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $categories);
+    }
+    
+    public function testPostBy() {
+        $this->markTestIncomplete('Not yet implemented');
+        #skip if no posts in blog
+        if($this->wordpress->getPostCount() < 1) {
+            $this->markTestSkipped('No posts to test');
+        }
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->wordpress->getPostsByCategory());
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->wordpress->getPostsByTag());
     }
     
     public function testCategories() {
