@@ -273,9 +273,9 @@ class ZendX_Service_Wordpress
      */
     public function getPost($id) {
         return $this->_client->call('metaWeblog.getPost', array(
-            'postid'        => $id,
-            'username'      => $this->getUsername(),
-            'password'      => $this->getPassword(),
+            'postid'    => $id,
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword(),
         ));
     }
     
@@ -292,6 +292,19 @@ class ZendX_Service_Wordpress
         catch(Zend_XmlRpc_Client_FaultException $e) {
             return FALSE;
         }
+    }
+    
+    /**
+     * Retrieves all categories to which the post is assigned
+     * @param $id Post id
+     * @return array
+     */
+    public function getPostCategories($id) {
+        return $this->_client->call('mt.getPostCategories', array(
+            'postid'    => $id,
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword()
+        ));
     }
     
     /**
