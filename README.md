@@ -32,4 +32,4 @@ Hopefully, you should see something like:
 > 
 > OK (7 tests, 28 assertions)
 
-    
+If you want to run a specific test, simply run `phpunit --filter testTags`.
