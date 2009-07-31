@@ -235,26 +235,19 @@ class ZendX_Service_Wordpress
      * @return array
      */
     public function getRecentPosts($count) {
-        return $this->_client->call('metaWeblog.getRecentPosts', array(
+        $posts = $this->_client->call('metaWeblog.getRecentPosts', array(
             'blogid'        => $this->getBlogId(),
             'username'      => $this->getUsername(),
             'password'      => $this->getPassword(),
             'numberOfPosts' => $count,
         ));
-    }
-
-    /**
-     * Retrieves minimal information of N most recent posts
-     * @param $count
-     * @return array
-     */
-    public function getRecentPostTitles($count) {
-        return $this->_client->call('mt.getRecentPostTitles', array(
-            'blogid'        => $this->getBlogId(),
-            'username'      => $this->getUsername(),
-            'password'      => $this->getPassword(),
-            'numberOfPosts' => $count,
-        ));
+        
+        require_once 'ZendX/Service/Wordpress/Post.php';
+        foreach($posts as $key => $item) {
+            $posts[$key] = new ZendX_Service_Wordpress_Post($this, $item);
+        }
+        
+        return $posts;
     }
 
     /**
@@ -262,21 +255,36 @@ class ZendX_Service_Wordpress
      * @return int
      */
     public function getPostCount() {
-        return count( $this->getRecentPostTitles(65536) );
+        return count(
+            $this->_client->call('mt.getRecentPostTitles', array(
+                'blogid'        => $this->getBlogId(),
+                'username'      => $this->getUsername(),
+                'password'      => $this->getPassword(),
+                'numberOfPosts' => 65536,
+            ))
+        );
     }
 
     /**
      * Retrieves a post for the given post id
      * @param $id
-     * @return array
+     * @return ZendX_Service_Wordpress_Post
      * @throws Zend_XmlRpc_Client_FaultException if no post exists for id
      */
     public function getPost($id) {
-        return $this->_client->call('metaWeblog.getPost', array(
-            'postid'    => $id,
-            'username'  => $this->getUsername(),
-            'password'  => $this->getPassword(),
-        ));
+        require_once 'ZendX/Service/Wordpress/Post.php';
+        if($id instanceof ZendX_Service_Wordpress_Post) {
+            $id = $id->getId();
+        }
+        
+        return new ZendX_Service_Wordpress_Post(
+            $this,
+            $this->_client->call('metaWeblog.getPost', array(
+                'postid'    => $id,
+                'username'  => $this->getUsername(),
+                'password'  => $this->getPassword(),
+            ))
+        );
     }
     
     /**
@@ -292,19 +300,6 @@ class ZendX_Service_Wordpress
         catch(Zend_XmlRpc_Client_FaultException $e) {
             return FALSE;
         }
-    }
-    
-    /**
-     * Retrieves all categories to which the post is assigned
-     * @param $id Post id
-     * @return array
-     */
-    public function getPostCategories($id) {
-        return $this->_client->call('mt.getPostCategories', array(
-            'postid'    => $id,
-            'username'  => $this->getUsername(),
-            'password'  => $this->getPassword()
-        ));
     }
     
     /**

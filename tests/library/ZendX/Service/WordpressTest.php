@@ -96,7 +96,7 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
             
             # get first available postid
             if(is_null($postid) && count($posts) > 0) {
-                $postid = $posts[0]['postid'];
+                $postid = $posts[0]->getId();
             }
         }
         
@@ -104,18 +104,19 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         if(!is_null($postid)) {
             $this->assertTrue($this->wordpress->hasPost($postid));
             $post = $this->wordpress->getPost($postid);
-            $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $post);
-            $this->assertEquals($postid, $post['postid']);
+            $this->assertType('ZendX_Service_Wordpress_Post', $post);
+            $this->assertEquals($postid, $post->getId());
         }
     }
     
     public function testPostCategories() {
+        $this->markTestIncomplete('Not yet implemented');
         $posts = $this->wordpress->getRecentPosts(1);
         # skip if no posts in blog
         if(count($posts) < 1) {
             $this->markTestSkipped('No posts to test');
         }
-        $categories = $this->wordpress->getPostCategories($posts[0]['postid']);
+        $categories = $post->getCategories();
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $categories);
     }
     
