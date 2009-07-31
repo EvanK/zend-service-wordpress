@@ -41,7 +41,9 @@ class ZendX_Service_Wordpress_Post extends ZendX_Service_Wordpress_Abstract
      * Retrieves author information
      * @return ZendX_Service_Wordpress_Author
      */
-    public function getAuthor() {} # @TODO: implement Author class
+    public function getAuthor() {
+        return $this->parent->getAuthor( $this->get('wpAuthorId') );
+    }
     
     /**
      * Retrieves all categories to which the post is assigned

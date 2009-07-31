@@ -159,5 +159,11 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $tag);
         $this->assertEquals($tag, $first_tag);
     }
+    
+    public function testAuthors() {
+        $authors = $this->wordpress->getAuthors();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $authors);
+        $this->assertType('ZendX_Service_Wordpress_Author', $this->wordpress->getAuthor($authors[0]));
+    }
 /***/
 }

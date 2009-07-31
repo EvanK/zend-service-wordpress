@@ -293,6 +293,7 @@ class ZendX_Service_Wordpress
      * @return boolean
      */
     public function hasPost($id) {
+        require_once 'Zend/XmlRpc/Client/FaultException.php';
         try {
             $this->getPost($id);
             return TRUE;
@@ -314,7 +315,7 @@ class ZendX_Service_Wordpress
                 return $category;
             }
         }
-        
+        require_once 'Zend/Service/Exception.php';
         throw new Zend_Service_Exception(sprintf('Category with id "%s" not found', $id));
     }
     
@@ -356,7 +357,7 @@ class ZendX_Service_Wordpress
                 return $tag;
             }
         }
-        
+        require_once 'Zend/Service/Exception.php';
         throw new Zend_Service_Exception(sprintf('Tag with id "%s" not found', $id));
     }
     
@@ -390,6 +391,54 @@ class ZendX_Service_Wordpress
         @TODO: getTagsAsList() - Create associative array of tags with nesting
                                  based on parentId
     */
+    
+    /**
+     * Retrieves all authors registered with the blog
+     * @return array
+     */
+    public function getAuthors() {
+        $authors = $this->_client->call('wp.getAuthors', array(
+            'blog_id'        => $this->getBlogId(),
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+        ));
+        
+        require_once 'ZendX/Service/Wordpress/Author.php';
+        foreach($authors as $key => $item) {
+            $authors[$key] = new ZendX_Service_Wordpress_Author($this, $item);
+        }
+        
+        return $authors;
+    }
+    
+    /**
+     * Retrieves an author for the given author id
+     * @param $id
+     * @return ZendX_Service_Wordpress_Author
+     */
+    public function getAuthor($id) {
+        require_once 'ZendX/Service/Wordpress/Author.php';
+        if($id instanceof ZendX_Service_Wordpress_Author) {
+            $id = $id->getId();
+        }
+        
+        $authors = $this->getAuthors();
+        foreach($authors as $author) {
+            if($author->getId() == $id) {
+                return $author;
+            }
+        }
+        require_once 'Zend/Service/Exception.php';
+        throw new Zend_Service_Exception('No such author');
+    }
+    
+    /**
+     * Retrieves the total number of authors
+     * @return int
+     */
+    public function getAuthorCount() {
+        return count($this->getAuthors());
+    }
     
     /* @TODO:
     getAuthors()

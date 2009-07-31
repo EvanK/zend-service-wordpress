@@ -79,7 +79,7 @@ abstract class ZendX_Service_Wordpress_Abstract
             return $this->get($property);
         }
         
-        include_once 'Zend/Service/Exception.php';
+        require_once 'Zend/Service/Exception.php';
         throw new Zend_Service_Exception('Invalid method "' . $method . '"');
     }
     
@@ -92,6 +92,7 @@ abstract class ZendX_Service_Wordpress_Abstract
         if(isset($this->_data[$property])) {
             return $this->_data[$property];
         }
+        require_once 'Zend/Service/Exception.php';
         throw new Zend_Service_Exception('Invalid property "' . $property . '"');
     }
 }
