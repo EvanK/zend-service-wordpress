@@ -42,11 +42,11 @@ class ZendX_Service_Wordpress
     protected $_client;
     
     /**
-     * Categories fetched via getCategories()
+     * Cached results of RPC calls
      * @var array
      */
-    protected $_categories;
-
+    protected $_cache;
+    
     /**
      * Tags fetched via getTags()
      * @var array
@@ -63,13 +63,14 @@ class ZendX_Service_Wordpress
      * @return void
      * @throws Zend_Service_Exception if no blog id provided for a multi-blog environment
      */
-    public function __construct($xmlrpc, $username, $password, $blogid=0)
+    public function __construct($xmlrpc, $username, $password, $blogid=0, $caching=TRUE)
     {
         // Store RPC options
         $this->setXmlRpcUrl($xmlrpc)
              ->setUsername($username)
              ->setPassword($password)
-             ->setBlogId($blogid);
+             ->setBlogId($blogid)
+             ->setCaching($caching);
 
         /**
          * @see Zend_XmlRpc_Client
@@ -78,7 +79,7 @@ class ZendX_Service_Wordpress
         $this->_client = new Zend_XmlRpc_Client( $this->getXmlRpcUrl() );
 
         // Get blog information associated with given user
-        $response = $this->_client->call('wp.getUsersBlogs', array( 'username' => $this->getUsername(), 'password' => $this->getPassword() ));
+        $response = $this->_rpc('wp.getUsersBlogs', array( 'username' => $this->getUsername(), 'password' => $this->getPassword() ));
 
         // Ensure, if a multi-blog system, that we have a valid blog id
         if(count($response) > 1) {
@@ -108,6 +109,48 @@ class ZendX_Service_Wordpress
         }
 
         return FALSE;
+    }
+
+    /**
+     * Retrieves the result of an xml-rpc call
+     * @param string $method
+     * @param array $params
+     * @return mixed
+     */
+    protected function _rpc($method, $params) {
+        // If caching is turned on
+        if($this->getCaching()) {
+            // Get cached method results if available
+            $signature = serialize(array($method, $params));
+            if(isset($this->_cache[$signature])) {
+                return $this->_cache[$signature];
+            }
+            // Otherwise call method and cache results
+            else {
+                $this->_cache[$signature] = $this->_client->call($method, $params);
+                return $this->_cache[$signature];
+            }
+        }
+        // Call method and return results with no caching
+        return $this->_client->call($method, $params);
+    }
+
+    /**
+     * Retrieves whether rpc calls are cached
+     * @return boolean
+     */
+    protected function getCaching() {
+        return $this->_options['caching'];
+    }
+
+    /**
+     * Sets whether rpc calls are cached
+     * @param boolean $caching
+     * @return ZendX_Service_Wordpress
+     */
+    protected function setCaching($caching) {
+        $this->_options['caching'] = $caching;
+        return $this;
     }
 
     /**
@@ -235,7 +278,7 @@ class ZendX_Service_Wordpress
      * @return array
      */
     public function getRecentPosts($count) {
-        $posts = $this->_client->call('metaWeblog.getRecentPosts', array(
+        $posts = $this->_rpc('metaWeblog.getRecentPosts', array(
             'blogid'        => $this->getBlogId(),
             'username'      => $this->getUsername(),
             'password'      => $this->getPassword(),
@@ -256,7 +299,7 @@ class ZendX_Service_Wordpress
      */
     public function getPostCount() {
         return count(
-            $this->_client->call('mt.getRecentPostTitles', array(
+            $this->_rpc('mt.getRecentPostTitles', array(
                 'blogid'        => $this->getBlogId(),
                 'username'      => $this->getUsername(),
                 'password'      => $this->getPassword(),
@@ -279,7 +322,7 @@ class ZendX_Service_Wordpress
         
         return new ZendX_Service_Wordpress_Post(
             $this,
-            $this->_client->call('metaWeblog.getPost', array(
+            $this->_rpc('metaWeblog.getPost', array(
                 'postid'    => $id,
                 'username'  => $this->getUsername(),
                 'password'  => $this->getPassword(),
@@ -324,16 +367,11 @@ class ZendX_Service_Wordpress
      * @return array categories
      */
     public function getCategories() {
-        // Store categories to speed up subsequent use
-        if (null === $this->_categories) {
-            $this->_categories = $this->_client->call('wp.getCategories', array(
-                'blog_id'   => $this->getBlogId(),
-                'username'  => $this->getUsername(),
-                'password'  => $this->getPassword()
-            ));
-        }
-        
-        return $this->_categories;
+        return $this->_rpc('wp.getCategories', array(
+            'blog_id'   => $this->getBlogId(),
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword()
+        ));
     }
     
     /**
@@ -366,16 +404,11 @@ class ZendX_Service_Wordpress
      * @return array Tags
      */
     public function getTags() {
-        // Store categories to speed up subsequent use
-        if (null === $this->_tags) {
-            $this->_tags = $this->_client->call('wp.getTags', array(
-                'blog_id'   => $this->getBlogId(),
-                'username'  => $this->getUsername(),
-                'password'  => $this->getPassword()
-            ));
-        }
-        
-        return $this->_tags;
+        return $this->_rpc('wp.getTags', array(
+            'blog_id'   => $this->getBlogId(),
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword()
+        ));
     }
     
     /**
@@ -397,7 +430,7 @@ class ZendX_Service_Wordpress
      * @return array
      */
     public function getAuthors() {
-        $authors = $this->_client->call('wp.getAuthors', array(
+        $authors = $this->_rpc('wp.getAuthors', array(
             'blog_id'        => $this->getBlogId(),
             'username'      => $this->getUsername(),
             'password'      => $this->getPassword(),
