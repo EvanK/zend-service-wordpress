@@ -56,10 +56,11 @@ class ZendX_Service_Wordpress
     /**
      * Constructor
      *
-     * @param  string $xmlrpc  XML-RPC url, normally the blog url plus 'xmlrpc.php'
-     * @param  string $username  Username
-     * @param  string $password  Password
-     * @param  string $blogid  Blog id, only needed for multi-blog environments (hosted at wordpress.com or a Mu install)
+     * @param  string  $xmlrpc  XML-RPC url, normally the blog url plus 'xmlrpc.php'
+     * @param  string  $username  Username
+     * @param  string  $password  Password
+     * @param  string  $blogid  Blog id, only needed for multi-blog environments (hosted at wordpress.com or a Mu install)
+     * @param  boolean $caching Whether to cache rpc calls for the life of the class
      * @return void
      * @throws Zend_Service_Exception if no blog id provided for a multi-blog environment
      */
