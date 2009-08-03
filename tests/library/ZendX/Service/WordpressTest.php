@@ -164,6 +164,20 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $authors = $this->wordpress->getAuthors();
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $authors);
         $this->assertType('ZendX_Service_Wordpress_Author', $this->wordpress->getAuthor($authors[0]));
+        
+        $total = $this->wordpress->getAuthorCount();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
+        $this->assertGreaterThanOrEqual(1, $total);
+    }
+    
+    public function testPages() {
+        $pages = $this->wordpress->getPages();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $pages);
+        $this->assertType('ZendX_Service_Wordpress_Page', $this->wordpress->getPage($pages[0]));
+        
+        $total = $this->wordpress->getPageCount();
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
+        $this->assertGreaterThanOrEqual(1, $total);
     }
 /***/
 }

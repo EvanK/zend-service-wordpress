@@ -474,9 +474,57 @@ class ZendX_Service_Wordpress
         return count($this->getAuthors());
     }
     
+    /**
+     * Retrieves all pages on the blog
+     * @return array
+     */
+    public function getPages() {
+        $pages = $this->_rpc('wp.getPages', array(
+            'blog_id'        => $this->getBlogId(),
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+        ));
+        
+        require_once 'ZendX/Service/Wordpress/Page.php';
+        foreach($pages as $key => $item) {
+            $pages[$key] = new ZendX_Service_Wordpress_Page($this, $item);
+        }
+        
+        return $pages;
+    }
+    
+    /**
+     * Retrieves a page for the given page id
+     * @param $id
+     * @return ZendX_Service_Wordpress_Page
+     */
+    public function getPage($id) {
+        require_once 'ZendX/Service/Wordpress/Page.php';
+        if($id instanceof ZendX_Service_Wordpress_Page) {
+            $id = $id->getId();
+        }
+        
+        return new ZendX_Service_Wordpress_Page($this, $this->_rpc('wp.getPage', array(
+            'blog_id'       => $this->getBlogId(),
+            'page_id'       => $id,
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+        )) );
+    }
+    
+    /**
+     * Retrieves the total number of pages on the blog
+     * @return int
+     */
+    public function getPageCount() {
+        return count( $this->_rpc('wp.getPageList', array(
+            'blog_id'        => $this->getBlogId(),
+            'username'      => $this->getUsername(),
+            'password'      => $this->getPassword(),
+        )) );
+    }
+    
     /* @TODO:
-    getAuthors()
-
     get<UNIT>StatusList()
     get<UNIT>Count()
     get<UNIT>(id)
