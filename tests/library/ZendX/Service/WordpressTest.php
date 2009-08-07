@@ -28,17 +28,16 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        try {
-            $this->wordpress = new ZendX_Service_Wordpress(
-                TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
-                TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
-                TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD,
-                TESTS_ZENDX_SERVICE_WORDPRESS_BLOGID
-            );
-        }
-        catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->wordpress = new ZendX_Service_Wordpress(
+            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+            TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
+            TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
+        );
+    }
+    
+    public function testGettingDefaultBlog()
+    {
+        $this->wordpress->getBlog();
     }
 
     public function testRpcClient() {
