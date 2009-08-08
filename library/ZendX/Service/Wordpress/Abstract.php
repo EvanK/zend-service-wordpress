@@ -152,4 +152,17 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         return $this->_data;
     }
     
+    /**
+     * @return XHTML link to the object
+     */
+    public function getLink($url = null)
+    {
+        if (null === $url) {
+            $url = $this->getUrl();
+        }
+        
+        return sprintf('<a href="%s" title="%s">%s</a>', $url,
+                                                         $this->getTitle(),
+                                                         $this->getTitle());
+    }
 }

@@ -19,10 +19,10 @@ require_once 'Zend/XmlRpc/Client.php';
 class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
 {
     /**
-     * XML-RPC URI for blog
-     * @var _uri
+     * XML-RPC URL for blog
+     * @var _xmlRpcUrl
      */
-    protected $_uri;
+    protected $_xmlRpcUrl;
     
     /**
      * Blog username
@@ -51,7 +51,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     /**
      * Constructor
      *
-     * @param  string  $uri       XML-RPC uri, normally the blog uri plus 'xmlrpc.php'
+     * @param  string  $xmlRpcUrl XML-RPC URL, normally the blog URL plus 'xmlrpc.php'
      * @param  string  $username  Username
      * @param  string  $password  Password
      * @param  string  $blogId    Blog id, only needed for multi-blog environments (hosted at wordpress.com or a Mu install)
@@ -59,18 +59,19 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      * @return void
      * @throws Zend_Service_Exception if no blog id provided for a multi-blog environment
      */
-    public function __construct($uri,
+    public function __construct($xmlRpcUrl,
                                 $username,
                                 $password,
                                 $caching = true)
     {
-        $this->setUsername($username)
+        $this->setXmlRpcUrl($xmlRpcUrl)
+             ->setUsername($username)
              ->setPassword($password)
              ->setCaching($caching)
              ->setSkipSystemLookup();
         
         // Setup Zend_XmlRpc_Client
-        parent::__construct($uri);
+        parent::__construct($xmlRpcUrl);
     }
     
     /**
@@ -123,6 +124,11 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         return $this->_password;
     }
     
+    public function getXmlRpcUrl()
+    {
+        return $this->_xmlRpcUrl;
+    }
+    
     /**
      * @return Blog title
      */
@@ -148,13 +154,27 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     }
     
     /**
-     * @return XHTML link to the Blog
+     * Return recent posts
+     *@var integer (Defaults to 10) limit
      */
-    public function getLink()
+    public function getRecentPosts($limit = 10)
     {
-        return sprintf('<a href="%s" title="%s">%s</a>', $this->getUrl(),
-                                                         $this->getTagline(),
-                                                         $this->getTitle());
+        $results = $this->call('metaWeblog.getRecentPosts', array(
+            'blogid'    =>  $this->getBlogId(),
+            'username'  =>  $this->getUsername(),
+            'password'  =>  $this->getPassword()
+        ));
+        
+        $posts = array();
+        foreach ($results as $data) {
+            $post = new ZendX_Service_Wordpress_Post($this->getXmlRpcUrl(),
+                                                     $this->getHttpClient());
+            $post->setData($data);
+            
+            array_push($posts, $post);
+        }
+        
+        return $posts;
     }
     
     public function setUsername($username)
@@ -179,6 +199,13 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     public function setCaching($caching)
     {
         $this->_caching = $caching;
+        
+        return $this;
+    }
+    
+    public function setXmlRpcUrl($xmlRpcUrl)
+    {
+        $this->_xmlRpcUrl = $xmlRpcUrl;
         
         return $this;
     }

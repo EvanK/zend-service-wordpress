@@ -102,4 +102,12 @@ Hopefully, you should see something like:
 > 
 > OK (7 tests, 28 assertions)
 
-If you want to run a specific test, simply run `phpunit --filter testTags`.
+If you want to run a specific test, simply run:
+    
+    # phpunit --filter testTags.
+    
+However, if you want to run all tests for `Wordpress` in general (or perhaps a
+subset of tests for just `Blog`, `Post`, `Category`, `Author`, or `Tag`), simply run:
+    
+    # phpunit --group Blog` // or something similar
+    

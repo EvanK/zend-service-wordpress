@@ -21,39 +21,30 @@ require_once 'ZendX/Service/Wordpress/Abstract.php';
  */
 class ZendX_Service_Wordpress_Post extends ZendX_Service_Wordpress_Abstract
 {
-    /**
-     * Retrieves post id
-     * @return string
-     */
-    public function getId() {
+
+    public function getId()
+    {
         return $this->get('postid');
     }
     
-    /**
-     * Retrieves post slug
-     * @return string
-     */
-    public function getSlug() {
-        return $this->get('wpSlug');
+    public function getUrl()
+    {
+        return $this->get('link');
     }
     
-    /**
-     * Retrieves author information
-     * @return ZendX_Service_Wordpress_Author
-     */
-    public function getAuthor() {
-        return $this->parent->getAuthor( $this->get('wpAuthorId') );
+    public function getPermaUrl()
+    {
+        return $this->get('permaLink');
     }
     
-    /**
-     * Retrieves all categories to which the post is assigned
-     * @return array
-     */
-    public function getCategories() {} # @TODO: implement Category class
-    
-    /**
-     * Retrieves all tags assigned to the post
-     * @return array
-     */
-    public function getTags() {} # @TODO: implement Tag class
+    public function getPermaLink()
+    {
+        return $this->getLink($this->getPermaUrl());
+    }
+
+    public function __toString()
+    {
+        return $this->getDescription();
+    }
+
 }

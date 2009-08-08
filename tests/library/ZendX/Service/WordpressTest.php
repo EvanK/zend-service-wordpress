@@ -1,13 +1,13 @@
 <?php
 /**
- * Zend Framework
+ * ZendX_Service_Wordpress unit tests
  *
  * @category   ZendX
  * @package    ZendX_Service
- * @subpackage UnitTests
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @subpackage WordpressTest
+ * @group      Wordpress
+ * @group      Blog
  */
-
 
 /**
  * Test helper
@@ -19,11 +19,6 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
  */
 require_once 'ZendX/Service/Wordpress.php';
 
-/**
- * @category   ZendX
- * @package    ZendX_Service
- * @subpackage UnitTests
- */
 class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -108,11 +103,8 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     
     public function testBlogHasLink()
     {
-        $link = sprintf('<a href="%s" title="%s">%s</a>', $this->blog->getUrl(),
-                                                          $this->blog->getTagline(),
-                                                          $this->blog->getTitle());
-        
-        $this->assertEquals($link, $this->blog->getLink());
+        $this->assertEquals(0,
+                            strpos($this->blog->getLink(), '<a'));
     }
     
     public function testBlogHasDateFormat()
@@ -126,6 +118,29 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
                           $this->blog->getTimeFormat());
     }
+    
+    public function testBlogHasRecentPosts()
+    {
+        $posts = $this->blog->getRecentPosts();
+        
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+                          $posts);
+        
+        $this->assertGreaterThan(1, count($posts));
+        $this->assertLessThanOrEqual(10, count($posts));
+        
+        // To ease debugging, we'll do a string comparison of what the
+        // class name *should be*
+        $classControl = array();
+        $classTest    = array();
+        foreach ($posts as $post) {
+            array_push($classControl, 'ZendX_Service_Wordpress_Post');
+            array_push($classTest,    get_class($post));
+        }
+        $this->assertEquals(join(', ', $classControl),
+                            join(', ', $classTest));
+    }
+
 /*
     public function testRpcClient() {
         $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
