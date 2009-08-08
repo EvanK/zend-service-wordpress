@@ -24,107 +24,155 @@ require_once 'ZendX/Service/Wordpress.php';
 */
 class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    
+    public static function blogProvider()
     {
         try {
-            $this->wordpress = new ZendX_Service_Wordpress(
+            $wordpress = new ZendX_Service_Wordpress(
                 TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
                 TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
                 TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
             );
-            
-            $this->blog = $this->wordpress->getBlog();
         } catch (Exception $e) {
             $this->fail($e->getMessage());
         }
+        
+        return array(
+            array($wordpress->getBlog())
+        );
     }
     
-    public function testBlogIsZendXServiceWordpressClass()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogIsZendXServiceWordpressClass($blog)
     {
-        $this->assertEquals('ZendX_Service_Wordpress', get_class($this->blog));
+        $this->assertEquals('ZendX_Service_Wordpress', get_class($blog));
     }
     
-    public function testBlogHasData()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasData($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $this->blog->getData());
+                          $blog->getData());
     }
     
-    public function testBlogHasTitle()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTitle($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->get('blog_title'));
+                          $blog->get('blog_title'));
     }
     
-    public function testBlogHasTitleMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTitleMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getTitle());
+                          $blog->getTitle());
     }
     
-    public function testBlogHasTitleMagicMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTitleMagicMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getBlogTitle());
+                          $blog->getBlogTitle());
     }
     
-    public function testBlogHasTagline()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTagline($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->get('blog_tagline'));
+                          $blog->get('blog_tagline'));
     }
     
-    public function testBlogHasTaglineMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTaglineMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getTagline());
+                          $blog->getTagline());
     }
     
-    public function testBlogHasTaglineMagicMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTaglineMagicMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getBlogTagline());
+                          $blog->getBlogTagline());
     }
     
-    public function testBlogHasUrl()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasUrl($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->get('blog_url'));
+                          $blog->get('blog_url'));
     }
     
-    public function testBlogHasUrlMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasUrlMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getUrl());
+                          $blog->getUrl());
     }
     
-    public function testBlogHasUrlMagicMethod()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasUrlMagicMethod($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getBlogUrl());
+                          $blog->getBlogUrl());
     }
     
-    public function testBlogHasLink()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasLink($blog)
     {
         $this->assertEquals(0,
-                            strpos($this->blog->getLink(), '<a'));
+                            strpos($blog->getLink(), '<a'));
     }
     
-    public function testBlogHasDateFormat()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasDateFormat($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getDateFormat());
+                          $blog->getDateFormat());
     }
     
-    public function testBlogHasTimeFormat()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTimeFormat($blog)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $this->blog->getTimeFormat());
+                          $blog->getTimeFormat());
     }
     
-    public function testBlogHasRecentPosts()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasRecentPosts($blog)
     {
-        $posts = $this->blog->getRecentPosts();
+        $posts = $blog->getRecentPosts();
         
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
                           $posts);
@@ -144,9 +192,12 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
                             join(', ', $classTest));
     }
     
-    public function testBlogHasAuthors()
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasAuthors($blog)
     {
-        $authors = $this->blog->getAuthors();
+        $authors = $blog->getAuthors();
         
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
                           $authors);
@@ -164,145 +215,27 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(join(', ', $classControl),
                             join(', ', $classTest));
     }
-
-/*
-    public function testRpcClient() {
-        $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
-        $this->wordpress->setXmlRpcClient(new Zend_XmlRpc_Client(''));
-        $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
-
-        $this->setExpectedException('Zend_Service_Exception');
-        $this->wordpress->setXmlRpcClient(FALSE);
-        $this->fail('Last setXmlRpcClient call should have raised an exception');
-    }
-
-    public function testRpcUrl() {
-        $this->assertEquals(TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL, $this->wordpress->getXmlRpcUrl());
-        $this->wordpress->setXmlRpcUrl('http://example.com/foobar');
-        $this->assertEquals('http://example.com/foobar', $this->wordpress->getXmlRpcUrl());
-
-        $this->setExpectedException('Zend_Service_Exception');
-        $this->wordpress->setXmlRpcUrl('This is not a URL');
-        $this->fail('Last setXmlRpcUrl call should have raised an exception');
-    }
-
-    public function testUsername() {
-        $this->assertEquals(TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME, $this->wordpress->getUsername());
-        $this->wordpress->setUsername('foo');
-        $this->assertEquals('foo', $this->wordpress->getUsername());
-    }
-
-    public function testPassword() {
-        $this->assertEquals(TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD, $this->wordpress->getPassword());
-        $this->wordpress->setPassword('bar');
-        $this->assertEquals('bar', $this->wordpress->getPassword());
-    }
-
-    public function testBlogId() {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_NUMERIC, $this->wordpress->getBlogId());
-        $this->wordpress->setBlogId(99);
-        $this->assertEquals(99, $this->wordpress->getBlogId());
-    }
     
-    public function testBlogData() {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $this->wordpress->getBlogName());
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $this->wordpress->getBlogUrl());
-    }
-
-    public function testPosts() {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $this->wordpress->getPostCount());
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasCategories($blog)
+    {
+        $categories = $blog->getCategories();
         
-        # test for up to 5 recent posts
-        $postid = NULL;
-        foreach (range(1,5) as $n) {
-            $posts = $this->wordpress->getRecentPosts($n);
-            $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $posts);
-            $this->assertLessThanOrEqual($n, count($posts));
-            
-            # get first available postid
-            if(is_null($postid) && count($posts) > 0) {
-                $postid = $posts[0]->getId();
-            }
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+                          $categories);
+        
+        $this->assertGreaterThanOrEqual(1, count($categories));
+        
+        $classControl = array();
+        $classTest    = array();
+        foreach ($categories as $category) {
+            array_push($classControl, 'ZendX_Service_Wordpress_Category');
+            array_push($classTest,    get_class($category));
         }
-        
-        # get specific post if we have a viable id
-        if(!is_null($postid)) {
-            $this->assertTrue($this->wordpress->hasPost($postid));
-            $post = $this->wordpress->getPost($postid);
-            $this->assertType('ZendX_Service_Wordpress_Post', $post);
-            $this->assertEquals($postid, $post->getId());
-        }
+        $this->assertEquals(join(', ', $classControl),
+                            join(', ', $classTest));
     }
     
-    public function testPostCategories() {
-        $this->markTestIncomplete('Not yet implemented');
-        $posts = $this->wordpress->getRecentPosts(1);
-        # skip if no posts in blog
-        if(count($posts) < 1) {
-            $this->markTestSkipped('No posts to test');
-        }
-        $categories = $post->getCategories();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $categories);
-    }
-    
-    public function testPostBy() {
-        $this->markTestIncomplete('Not yet implemented');
-        #skip if no posts in blog
-        if($this->wordpress->getPostCount() < 1) {
-            $this->markTestSkipped('No posts to test');
-        }
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->wordpress->getPostsByCategory());
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->wordpress->getPostsByTag());
-    }
-    
-    public function testCategories() {
-        $total = $this->wordpress->getCategoryCount();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
-        $this->assertGreaterThanOrEqual(1, $total);
-        
-        $categories = $this->wordpress->getCategories();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $categories);
-        $this->assertEquals($total, count($categories));
-        
-        $first_category = $categories[0];
-        $category = $this->wordpress->getCategory($first_category['categoryId']);
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $category);
-        $this->assertEquals($category, $first_category);
-    }
-    
-    public function testTags() {
-        $total = $this->wordpress->getTagCount();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
-        $this->assertGreaterThanOrEqual(1, $total);
-        
-        $tags = $this->wordpress->getTags();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $tags);
-        $this->assertEquals($total, count($tags));
-        
-        $first_tag = $tags[0];
-        $tag = $this->wordpress->getTag($first_tag['tag_id']);
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $tag);
-        $this->assertEquals($tag, $first_tag);
-    }
-    
-    public function testAuthors() {
-        $authors = $this->wordpress->getAuthors();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $authors);
-        $this->assertType('ZendX_Service_Wordpress_Author', $this->wordpress->getAuthor($authors[0]));
-        
-        $total = $this->wordpress->getAuthorCount();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
-        $this->assertGreaterThanOrEqual(1, $total);
-    }
-    
-    public function testPages() {
-        $pages = $this->wordpress->getPages();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $pages);
-        $this->assertType('ZendX_Service_Wordpress_Page', $this->wordpress->getPage($pages[0]));
-        
-        $total = $this->wordpress->getPageCount();
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_INT, $total);
-        $this->assertGreaterThanOrEqual(1, $total);
-    }
-/***/
 }

@@ -46,6 +46,10 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
         return $this->get('user_login');
     }
     
+    /**
+     * Returns author name when cast as string
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName();

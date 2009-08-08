@@ -116,7 +116,6 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         throw new ZendX_Service_Wordpress_Exception('Invalid method "' . $method . '"');
     }
     
-    
     /**
      * Retrieve data set by key
      * @param  string (optional) $key

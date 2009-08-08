@@ -13,8 +13,31 @@
  * XML-RPC Client
  * @see Zend_XmlRpc_Client
  */
- 
 require_once 'Zend/XmlRpc/Client.php';
+
+/**
+ * Wordpress Abstract
+ * @see ZendX_Service_Wordpress_Abstract
+ */
+require_once 'ZendX/Service/Wordpress/Abstract.php';
+
+/**
+ * Wordpress posts
+ * @see ZendX_Service_Wordpress_Post
+ */
+require_once 'ZendX/Service/Wordpress/Post.php';
+
+/**
+ * Wordpress categories
+ * @see ZendX_Service_Wordpress_Category
+ */
+require_once 'ZendX/Service/Wordpress/Category.php';
+
+/**
+ * Wordpress authors
+ * @see ZendX_Service_Wordpress_Author
+ */
+require_once 'ZendX/Service/Wordpress/Author.php';
 
 class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
 {
@@ -201,6 +224,34 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         return $authors;
     }
     
+    /**
+     * Return all of the categories on the site
+     * @return array ZendX_Service_Wordpress_Categories
+     */
+    public function getCategories()
+    {
+        $results = $this->call('wp.getCategories', array(
+            'blog_id'   =>  $this->getBlogId(),
+            'username'  =>  $this->getUsername(),
+            'password'  =>  $this->getPassword()
+        ));
+        
+        $categories = array();
+        foreach ($results as $data) {
+            $category = new ZendX_Service_Wordpress_Category($this->getXmlRpcUrl(),
+                                                             $this->getHttpClient());
+            $category->setData();
+            
+            array_push($categories, $category);
+        }
+        
+        return $categories;
+    }
+    
+    /**
+     * Retrieve Wordpress username
+     * @return string username
+     */
     public function setUsername($username)
     {
         $this->_username = $username;
@@ -208,6 +259,10 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         return $this;
     }
     
+    /**
+     * Retrieve Wordpress password
+     * @return string password
+     */
     public function setPassword($password)
     {
         $this->_password = $password;
@@ -215,11 +270,19 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         return $this;
     }
     
+    /**
+     * Retrieve current blog ID
+     * @return integer blog ID
+     */
     public function setBlogId($id)
     {
         $this->_blogId = $id;
     }
     
+    /**
+     * Enable/Disable caching
+     * @return ZendX_Service_Wordpress
+     */
     public function setCaching($caching)
     {
         $this->_caching = $caching;
@@ -227,6 +290,10 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         return $this;
     }
     
+    /**
+     * Set XML-RPC URL
+     * @return ZendX_Service_Wordpress
+     */
     public function setXmlRpcUrl($xmlRpcUrl)
     {
         $this->_xmlRpcUrl = $xmlRpcUrl;
