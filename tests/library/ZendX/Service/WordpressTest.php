@@ -19,8 +19,8 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
 require_once 'ZendX/Service/Wordpress.php';
 
 /**
- * @group      Wordpress
- * @group      Blog
+ * @group Wordpress
+ * @group Blog
 */
 class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
@@ -139,6 +139,27 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         foreach ($posts as $post) {
             array_push($classControl, 'ZendX_Service_Wordpress_Post');
             array_push($classTest,    get_class($post));
+        }
+        $this->assertEquals(join(', ', $classControl),
+                            join(', ', $classTest));
+    }
+    
+    public function testBlogHasAuthors()
+    {
+        $authors = $this->blog->getAuthors();
+        
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+                          $authors);
+        
+        $this->assertGreaterThanOrEqual(1, count($authors));
+        
+        // To ease debugging, we'll do a string comparison of what the
+        // class name *should be*
+        $classControl = array();
+        $classTest    = array();
+        foreach ($authors as $author) {
+            array_push($classControl, 'ZendX_Service_Wordpress_Author');
+            array_push($classTest,    get_class($author));
         }
         $this->assertEquals(join(', ', $classControl),
                             join(', ', $classTest));

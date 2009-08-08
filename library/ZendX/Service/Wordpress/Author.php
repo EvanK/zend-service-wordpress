@@ -26,7 +26,7 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
      * @return string
      */
     public function getId() {
-        return $this->get('userId');
+        return $this->get('user_id');
     }
     
     /**
@@ -34,6 +34,20 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
      * @return string
      */
     public function getName() {
-        return $this->get('displayName');
+        return $this->get('display_name');
+    }
+    
+    /**
+     * Retrieves author login name
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->get('user_login');
+    }
+    
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

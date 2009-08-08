@@ -155,7 +155,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     
     /**
      * Return recent posts
-     *@var integer (Defaults to 10) limit
+     * @var integer (Defaults to 10) limit
      */
     public function getRecentPosts($limit = 10)
     {
@@ -175,6 +175,30 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         }
         
         return $posts;
+    }
+    
+    /**
+     * Return all of the authors on the site
+     * @return array ZendX_Service_Wordpress_Author
+     */
+    public function getAuthors()
+    {
+        $results = $this->call('wp.getAuthors', array(
+            'blog_id'   =>  $this->getBlogId(),
+            'username'  =>  $this->getUsername(),
+            'password'  =>  $this->getPassword()
+        ));
+        
+        $authors = array();
+        foreach ($results as $data) {
+            $author = new ZendX_Service_Wordpress_Author($this->getXmlRpcUrl(),
+                                                         $this->getHttpClient());
+            $author->setData($data);
+            
+            array_push($authors, $author);
+        }
+        
+        return $authors;
     }
     
     public function setUsername($username)
