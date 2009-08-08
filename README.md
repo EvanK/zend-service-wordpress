@@ -13,18 +13,25 @@ a [WordPress][wordpress] blog's content via [WordPress' XML-RPC][xmlrpc] gateway
 Zend\_Service\_Wordpress tries to keep a small, consistent API that returns results
 based on the context of the call.
 
-For example, you can call `getCategories()` on
-both the `ZendX_Service_Wordpress` and `ZendX_Service_Post`.
+For example, you can call `getCategories()` on both the `ZendX_Service_Wordpress` and
+`ZendX_Service_Wordpress_Post`.
 
-With the first,
-you'll receive all of the categories for the entire blog while the latter returns
-only the categories attached to that post (as `ZendX_Service_Wordpress_Category`
-objects, of course).
+With the first, you'll receive all of the categories for the entire blog while the
+latter returns only the categories attached to that post (as
+`ZendX_Service_Wordpress_Category` objects, of course).
 
 ### Connect to your blog:
     
-    // ZendX_Service_Wordpress(XMLRPC_URL, USERNAME, PASSWORD[, BLOG_ID])
-    $blog = new ZendX_Service_Wordpress('http://wordpress-site.com/xmlrpc.php', 'username', 'password', 0);
+    // ZendX_Service_Wordpress(XMLRPC_URL, USERNAME, PASSWORD[, CACHE = true ])
+    //
+    // Caching assumes that categories/posts/tags aren't being edited during the lifetime
+    // or the page rendering
+    $wordpress = new ZendX_Service_Wordpress('http://wordpress-site.com/xmlrpc.php', 'username', 'password');
+    
+    // Get default blog
+    $blog = $wordpress->getBlog();
+    // or a specific blog by id:
+    $blog = $wordpress->getBlog(0)
     
 ### Get various site information:
     

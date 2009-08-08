@@ -28,18 +28,105 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->wordpress = new ZendX_Service_Wordpress(
-            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
-            TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
-            TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
-        );
+        try {
+            $this->wordpress = new ZendX_Service_Wordpress(
+                TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+                TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
+                TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
+            );
+            
+            $this->blog = $this->wordpress->getBlog();
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
     
-    public function testGettingDefaultBlog()
+    public function testBlogIsZendXServiceWordpressClass()
     {
-        $this->wordpress->getBlog();
+        $this->assertEquals('ZendX_Service_Wordpress', get_class($this->blog));
     }
-
+    
+    public function testBlogHasData()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+                          $this->blog->getData());
+    }
+    
+    public function testBlogHasTitle()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->get('blog_title'));
+    }
+    
+    public function testBlogHasTitleMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getTitle());
+    }
+    
+    public function testBlogHasTitleMagicMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getBlogTitle());
+    }
+    
+    public function testBlogHasTagline()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->get('blog_tagline'));
+    }
+    
+    public function testBlogHasTaglineMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getTagline());
+    }
+    
+    public function testBlogHasTaglineMagicMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getBlogTagline());
+    }
+    
+    public function testBlogHasUrl()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->get('blog_url'));
+    }
+    
+    public function testBlogHasUrlMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getUrl());
+    }
+    
+    public function testBlogHasUrlMagicMethod()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getBlogUrl());
+    }
+    
+    public function testBlogHasLink()
+    {
+        $link = sprintf('<a href="%s" title="%s">%s</a>', $this->blog->getUrl(),
+                                                          $this->blog->getTagline(),
+                                                          $this->blog->getTitle());
+        
+        $this->assertEquals($link, $this->blog->getLink());
+    }
+    
+    public function testBlogHasDateFormat()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getDateFormat());
+    }
+    
+    public function testBlogHasTimeFormat()
+    {
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+                          $this->blog->getTimeFormat());
+    }
+/*
     public function testRpcClient() {
         $this->assertType('Zend_XmlRpc_Client', $this->wordpress->getXmlRpcClient());
         $this->wordpress->setXmlRpcClient(new Zend_XmlRpc_Client(''));
