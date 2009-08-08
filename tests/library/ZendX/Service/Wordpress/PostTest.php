@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZendX_Service_Wordpress_Post unit tests
  *
@@ -8,6 +9,7 @@
  * @group      Wordpress
  * @group      Post
  */
+ 
 /**
  * Test helper
  */
