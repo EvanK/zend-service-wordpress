@@ -6,8 +6,6 @@
  * @category   ZendX
  * @package    ZendX_Service
  * @subpackage WordpressTest
- * @group      Wordpress
- * @group      Blog
  */
 
 /**
@@ -20,6 +18,10 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
  */
 require_once 'ZendX/Service/Wordpress.php';
 
+/**
+ * @group      Wordpress
+ * @group      Blog
+*/
 class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()

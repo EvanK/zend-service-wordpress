@@ -1,15 +1,14 @@
 <?php
 
 /**
- * ZendX_Service_Wordpress_Post unit tests
+ * Zend Framework
  *
  * @category   ZendX
  * @package    ZendX_Service_Wordpress
  * @subpackage PostTest
- * @group      Wordpress
- * @group      Post
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
  * Test helper
  */
@@ -20,6 +19,10 @@ require_once dirname(__FILE__) . '/../../../TestHelper.php';
  */
 require_once 'ZendX/Service/Wordpress/Post.php';
 
+/**
+ * @group   Wordpress
+ * @group   Post
+ */
 class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
 {
     

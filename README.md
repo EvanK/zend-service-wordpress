@@ -109,5 +109,8 @@ If you want to run a specific test, simply run:
 However, if you want to run all tests for `Wordpress` in general (or perhaps a
 subset of tests for just `Blog`, `Post`, `Category`, `Author`, or `Tag`), simply run:
     
-    # phpunit --group Blog` // or something similar
+    # phpunit --group Wordpress
+    # phpunit --group Blog
+    # phpunit --group Post
+    etc...
     
