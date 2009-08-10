@@ -25,6 +25,7 @@ require_once 'ZendX/Service/Wordpress.php';
  */
 class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
 {
+
     public static function postProvider()
     {
         try {
@@ -39,7 +40,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
         
         return array($wordpress->getBlog()->getRecentPosts(1));
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -50,7 +51,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
             $post->getId()
         );
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -61,7 +62,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
             $post->getTitle()
         );
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -72,7 +73,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
             $post->getDescription()
         );
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -88,7 +89,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
             (String) $post
         );
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -99,7 +100,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
             $post->getUrl()
         );
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -113,7 +114,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
         // Ensure link actually starts with a link
         $this->assertEquals(0, strpos($post->getLink(), '<a'));
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -127,7 +128,7 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
         // Ensure link actually starts with a link
         $this->assertEquals(0, strpos($post->getPermaLink(), '<a'));
     }
-    
+
     /**
      * @dataProvider postProvider
      */
@@ -135,4 +136,5 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('Missing post categories test');
     }
+
 }

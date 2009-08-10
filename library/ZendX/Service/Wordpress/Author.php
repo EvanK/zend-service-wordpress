@@ -14,13 +14,9 @@
  */
 require_once 'ZendX/Service/Wordpress/Abstract.php';
 
-/**
- * @category   ZendX
- * @package    ZendX_Service_Wordpress
- * @subpackage Author
- */
 class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
 {
+
     /**
      * Retrieves author id
      * @return string
@@ -29,7 +25,7 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
     {
         return $this->get('user_id');
     }
-    
+
     /**
      * Retrieves author display name
      * @return string
@@ -38,7 +34,7 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
     {
         return $this->get('display_name');
     }
-    
+
     /**
      * Retrieves author login name
      * @return string
@@ -47,7 +43,7 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
     {
         return $this->get('user_login');
     }
-    
+
     /**
      * Returns author name when cast as string
      * @return string
@@ -56,4 +52,5 @@ class ZendX_Service_Wordpress_Author extends ZendX_Service_Wordpress_Abstract
     {
         return $this->getName();
     }
+
 }

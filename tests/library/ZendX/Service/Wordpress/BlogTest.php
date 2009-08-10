@@ -1,17 +1,17 @@
 <?php
 
 /**
- * ZendX_Service_Wordpress unit tests
+ * ZendX_Service_Wordpress_Blog unit tests
  *
  * @category   ZendX
- * @package    ZendX_Service
- * @subpackage WordpressTest
+ * @package    ZendX_Service_Wordpress
+ * @subpackage BlogTest
  */
 
 /**
  * Test helper
  */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
  * @see ZendX_Service_Wordpress
@@ -20,8 +20,9 @@ require_once 'ZendX/Service/Wordpress.php';
 
 /**
  * @group Wordpress
+ * @group Blog
 */
-class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
+class ZendX_Service_Wordpress_BlogTest extends PHPUnit_Framework_TestCase
 {
 
     public static function blogProvider()
@@ -147,7 +148,7 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
             $blog->getUrl()
         );
     }
-
+    
     /**
      * @dataProvider blogProvider
      */

@@ -21,6 +21,37 @@ require_once 'Zend/Filter/Inflector.php';
 
 abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
 {
+
+    /**
+     * XML-RPC URL for blog
+     * @var _xmlRpcUrl
+     */
+    protected static $_xmlRpcUrl;
+
+    /**
+     * Blog ID
+     * @var integer _blogId
+     */
+    protected static $_blogId;
+
+    /**
+     * Blog username
+     * @var string _username
+     */
+    protected static $_username;
+
+    /**
+     * Blog password
+     * @var string _password
+     */
+    protected static $_password;
+
+    /**
+     * Whether or not caching is enabled
+     * @var boolean _caching
+     */
+    protected static $_caching;
+
     /**
      * Object data
      * @var array
@@ -46,7 +77,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         
         parent::__construct($server, $httpClient);
     }
-    
+
     protected function _initInflectors()
     {
         $camelCase = new Zend_Filter_Inflector(':key');
@@ -57,7 +88,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         
         array_push($this->_inflectors, $camelCase);
     }
-    
+
     /**
      * Store the data returned by XML-RPC request
      *
@@ -70,7 +101,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         
         return $this;
     }
-    
+
     /**
      * Method overloading
      *
@@ -94,7 +125,87 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
             'Invalid method "' . $method . '"'
         );
     }
-    
+
+    /**
+     * Reduce redundancy with XML-RPC calls
+     *
+     * @param string XML-RPC method
+     * @param array  Parameters
+     *
+     * @return mixed XML-RPC response
+     */
+    public function call($method, $params = array())
+    {
+        // Get user's credentials
+        $credentials = array(
+            'username'  =>  $this->getUsername(),
+            'password'  =>  $this->getPassword()
+        );
+        
+        // Add on any additional parameters to credentials
+        $params = array_merge($credentials, $params);
+        
+        // Identify the service (wp, metaWeblog, etc.) and the action
+        list($service, $action) = explode(".", $method);
+        
+        // Each service identifies the "blog id" differently
+        switch ($service) {
+            case 'metaWeblog':
+                $blog = array('blogid' => $this->getBlogId());
+                break;
+            default:
+                $blog = array('blog_id' => $this->getBlogId());
+                break;
+        }
+        
+        // Push blog identifier onto beginning of parameters
+        $params = array_merge($blog, $params);
+        
+        // Call requested service
+        return parent::call("$service.$action", $params);
+    }
+
+    /**
+     * Similar to _getCallObjects, but for a single object
+     */
+    protected function _getCallObject($method, $objectType, $params = array())
+    {
+        $data = $this->call($method, $params);
+        
+        // Define class name based on object type (Post, Tag, etc.)
+        $className = "ZendX_Service_Wordpress_" . ucfirst($objectType);
+        
+        // New class uses the same XML-RPC URL & HTTP Client as Wordpress
+        $object = new $className($this->getXmlRpcUrl(),
+                                 $this->getHttpClient());
+        $object->setData($data);
+        
+        return $object;
+    }
+
+    /**
+     * Facilitates redundant XML-RPC calls that get converted into subclasses
+     */
+    protected function _getCallObjects($method, $objectType, $params = array())
+    {
+        $results = $this->call($method, $params);
+        
+        // Define class name based on object type (Post, Tag, etc.)
+        $className = "ZendX_Service_Wordpress_" . ucfirst($objectType);
+        
+        $objects = array();
+        foreach ($results as $data) {
+            // New class uses the same XML-RPC URL & HTTP Client as Wordpress
+            $object = new $className($this->getXmlRpcUrl(),
+                                     $this->getHttpClient());
+            $object->setData($data);
+            
+            array_push($objects, $object);
+        }
+        
+        return $objects;
+    }
+
     /**
      * Retrieve data set by key
      * @param  string (optional) $key
@@ -123,7 +234,15 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
             'Key "' . $key . '" not set in data.'
         );
     }
-    
+
+    /**
+     * @return XML-RPC URL
+     */
+    public function getXmlRpcUrl()
+    {
+        return self::$_xmlRpcUrl;
+    }
+
     /**
      * Retrieve all data
      * @return array
@@ -132,7 +251,23 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
     {
         return $this->_data;
     }
+
+    /**
+     * @return Username
+     */
+    public function getUsername()
+    {
+        return self::$_username;
+    }
     
+    /**
+     * @return Password
+     */
+    public function getPassword()
+    {
+        return self::$_password;
+    }
+
     /**
      * @return XHTML link to the object
      */
@@ -149,4 +284,67 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
             $this->getTitle()
         );
     }
+
+    /**
+     * @return Blog ID
+     */
+    public function getBlogId()
+    {
+        return self::$_blogId;
+    }
+
+    /**
+     * Enable/Disable caching
+     * @return ZendX_Service_Wordpress
+     */
+    public function setCaching($caching)
+    {
+        self::$_caching = $caching;
+        
+        return $this;
+    }
+
+    /**
+     * Set XML-RPC URL
+     * @return ZendX_Service_Wordpress
+     */
+    public function setXmlRpcUrl($xmlRpcUrl)
+    {
+        self::$_xmlRpcUrl = $xmlRpcUrl;
+        
+        return $this;
+    }
+
+    /**
+     * Retrieve Wordpress username
+     * @return string username
+     */
+    public function setUsername($username)
+    {
+        self::$_username = $username;
+        
+        return $this;
+    }
+
+    /**
+     * Retrieve Wordpress password
+     * @return string password
+     */
+    public function setPassword($password)
+    {
+        self::$_password = $password;
+        
+        return $this;
+    }
+
+    /**
+     * Retrieve current blog ID
+     * @return integer blog ID
+     */
+    public function setBlogId($id)
+    {
+        self::$_blogId = $id;
+    }
+    
+
 }

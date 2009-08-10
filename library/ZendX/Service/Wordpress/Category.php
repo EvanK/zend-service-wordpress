@@ -14,11 +14,6 @@
  */
 require_once 'ZendX/Service/Wordpress/Abstract.php';
 
-/**
- * @category   ZendX
- * @package    ZendX_Service_Wordpress
- * @subpackage Post
- */
 class ZendX_Service_Wordpress_Category extends ZendX_Service_Wordpress_Abstract
 {
     

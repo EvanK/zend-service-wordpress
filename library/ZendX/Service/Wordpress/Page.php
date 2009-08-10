@@ -21,6 +21,7 @@ require_once 'ZendX/Service/Wordpress/Abstract.php';
  */
 class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
 {
+
     /**
      * Retrieves page id
      * @return string
@@ -29,7 +30,7 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
     {
         return $this->get('pageId');
     }
-    
+
     /**
      * Retrieves author display name
      * @return string
@@ -38,7 +39,7 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
     {
         return $this->get('wpSlug');
     }
-    
+
     /**
      * Retrieves author information
      * @return ZendX_Service_Wordpress_Author
@@ -47,7 +48,7 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
     {
         return $this->parent->getAuthor($this->get('wpAuthorId'));
     }
-    
+
     /**
      * Retrieves all categories to which the post is assigned
      * @return array
@@ -56,7 +57,7 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
     {
         # @TODO: implement Category class
     }
-    
+
     /**
      * Retrieves all tags assigned to the post
      * @return array
