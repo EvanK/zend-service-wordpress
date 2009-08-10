@@ -238,4 +238,25 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
                             join(', ', $classTest));
     }
     
+    /**
+     * @dataProvider blogProvider
+     */
+    public function testBlogHasTags($blog)
+    {
+        $tags = $blog->getTags();
+        
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+                          $tags);
+        
+        $this->assertGreaterThanOrEqual(1, count($tags));
+        
+        $classControl = array();
+        $classTest    = array();
+        foreach ($tags as $tag) {
+            array_push($classControl, 'ZendX_Service_Wordpress_Tag');
+            array_push($classTest,    get_class($tag));
+        }
+        $this->assertEquals(join(', ', $classControl),
+                            join(', ', $classTest));
+    }
 }

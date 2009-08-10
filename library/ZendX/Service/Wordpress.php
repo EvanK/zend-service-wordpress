@@ -34,6 +34,12 @@ require_once 'ZendX/Service/Wordpress/Post.php';
 require_once 'ZendX/Service/Wordpress/Category.php';
 
 /**
+ * Wordpress tags
+ * @see ZendX_Service_Wordpress_Tag
+ */
+require_once 'ZendX/Service/Wordpress/Tag.php';
+
+/**
  * Wordpress authors
  * @see ZendX_Service_Wordpress_Author
  */
@@ -95,6 +101,54 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         
         // Setup Zend_XmlRpc_Client
         parent::__construct($xmlRpcUrl);
+    }
+    
+    /**
+     * Facilitates redundant XML-RPC calls that get converted into subclasses
+     */
+    protected function _getCallObjects($method, $objectType, $params = array())
+    {
+        // Get user's credentials
+        $credentials = array(
+            'username'  =>  $this->getUsername(),
+            'password'  =>  $this->getPassword()
+        );
+        
+        // Add on any additional parameters to credentials
+        $params = array_merge($credentials, $params);
+        
+        // Identify the service (wp, metaWeblog, etc.) and the action
+        list($service, $action) = explode(".", $method);
+        
+        // Each service identifies the "blog id" differently
+        switch ($service) {
+            case 'metaWeblog':
+                $blog = array('blogid' => $this->getBlogId());
+                break;
+            default:
+                $blog = array('blog_id' => $this->getBlogId());
+        }
+        
+        // Push blog identifier onto beginning of parameters
+        $params = array_merge($blog, $params);
+        
+        // Call requested service
+        $results = $this->call("$service.$action", $params);
+        
+        // Define class name based on object type (Post, Tag, etc.)
+        $className = "ZendX_Service_Wordpress_" . ucfirst($objectType);
+        
+        $objects = array();
+        foreach ($results as $data) {
+            // New class uses the same XML-RPC URL & HTTP Client as Wordpress
+            $object = new $className($this->getXmlRpcUrl(),
+                                     $this->getHttpClient());
+            $object->setData($data);
+            
+            array_push($objects, $object);
+        }
+        
+        return $objects;
     }
     
     /**
@@ -182,22 +236,9 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      */
     public function getRecentPosts($limit = 10)
     {
-        $results = $this->call('metaWeblog.getRecentPosts', array(
-            'blogid'    =>  $this->getBlogId(),
-            'username'  =>  $this->getUsername(),
-            'password'  =>  $this->getPassword()
+        return $this->_getCallObjects('metaWeblog.getRecentPosts', 'post', array(
+            'numberOfPosts' =>  $limit
         ));
-        
-        $posts = array();
-        foreach ($results as $data) {
-            $post = new ZendX_Service_Wordpress_Post($this->getXmlRpcUrl(),
-                                                     $this->getHttpClient());
-            $post->setData($data);
-            
-            array_push($posts, $post);
-        }
-        
-        return $posts;
     }
     
     /**
@@ -206,22 +247,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      */
     public function getAuthors()
     {
-        $results = $this->call('wp.getAuthors', array(
-            'blog_id'   =>  $this->getBlogId(),
-            'username'  =>  $this->getUsername(),
-            'password'  =>  $this->getPassword()
-        ));
-        
-        $authors = array();
-        foreach ($results as $data) {
-            $author = new ZendX_Service_Wordpress_Author($this->getXmlRpcUrl(),
-                                                         $this->getHttpClient());
-            $author->setData($data);
-            
-            array_push($authors, $author);
-        }
-        
-        return $authors;
+        return $this->_getCallObjects('wp.getAuthors', 'author');
     }
     
     /**
@@ -230,22 +256,16 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      */
     public function getCategories()
     {
-        $results = $this->call('wp.getCategories', array(
-            'blog_id'   =>  $this->getBlogId(),
-            'username'  =>  $this->getUsername(),
-            'password'  =>  $this->getPassword()
-        ));
-        
-        $categories = array();
-        foreach ($results as $data) {
-            $category = new ZendX_Service_Wordpress_Category($this->getXmlRpcUrl(),
-                                                             $this->getHttpClient());
-            $category->setData();
-            
-            array_push($categories, $category);
-        }
-        
-        return $categories;
+        return $this->_getCallObjects('wp.getCategories', 'category');
+    }
+    
+    /**
+     * Return all of the tags on the site
+     * @return array ZendX_Service_Wordpress_Tag
+     */
+    public function getTags()
+    {
+        return $this->_getCallObjects('wp.getTags', 'tag');
     }
     
     /**
