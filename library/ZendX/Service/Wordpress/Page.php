@@ -25,7 +25,8 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
      * Retrieves page id
      * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->get('pageId');
     }
     
@@ -33,7 +34,8 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
      * Retrieves author display name
      * @return string
      */
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->get('wpSlug');
     }
     
@@ -41,19 +43,26 @@ class ZendX_Service_Wordpress_Page extends ZendX_Service_Wordpress_Abstract
      * Retrieves author information
      * @return ZendX_Service_Wordpress_Author
      */
-    public function getAuthor() {
-        return $this->parent->getAuthor( $this->get('wpAuthorId') );
+    public function getAuthor()
+    {
+        return $this->parent->getAuthor($this->get('wpAuthorId'));
     }
     
     /**
      * Retrieves all categories to which the post is assigned
      * @return array
      */
-    public function getCategories() {} # @TODO: implement Category class
+    public function getCategories()
+    {
+        # @TODO: implement Category class
+    }
     
     /**
      * Retrieves all tags assigned to the post
      * @return array
      */
-    public function getTags() {} # @TODO: implement Tag class
+    public function getTags()
+    {
+         # @TODO: implement Tag class
+    }
 }

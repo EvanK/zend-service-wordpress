@@ -45,8 +45,10 @@ class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthorHasId($author)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getId());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $author->getId()
+        );
     }
     
     /**
@@ -54,8 +56,10 @@ class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthorHasLogin($author)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getLogin());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $author->getLogin()
+        );
     }
     
     /**
@@ -63,8 +67,10 @@ class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthorHasName($author)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getName());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $author->getName()
+        );
     }
     
     /**
@@ -72,8 +78,10 @@ class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthorNameIsEquivalentToStringMagicMethod($author)
     {
-        $this->assertEquals($author->getName(),
-                            (String) $author);
+        $this->assertEquals(
+            $author->getName(),
+            (String) $author
+        );
     }
 }
 

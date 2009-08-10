@@ -50,9 +50,10 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
     protected function _initInflectors()
     {
         $camelCase = new Zend_Filter_Inflector(':key');
-        $camelCase->setRules(array(
-            ':key'  => array('Word_CamelCaseToUnderscore', 'StringToLower')
-        ));
+        
+        $camelCase->setRules(
+            array(':key' => array('Word_CamelCaseToUnderscore','StringToLower'))
+        );
         
         array_push($this->_inflectors, $camelCase);
     }
@@ -65,34 +66,9 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
      */
     public function setData($data = array())
     {
-        foreach ($data as $key => $value) {
-            $normal_key = $this->_normalize($key);
-            
-            unset($data[$key]);
-            $data[$normal_key] = $value;
-        }
-        
         $this->_data = $data;
         
         return $this;
-    }
-    
-    /**
-     * Normalize keys returned by XML-RPC
-     * ("mt_blog_id" becomes "blogId")
-     * 
-     * @return string $key
-     */
-    protected function _normalize($key)
-    {
-        $normal_key = preg_replace('/[^a-z0-9]+/i', '',
-            preg_replace_callback('/_+([a-z])/i',
-                create_function('$matches', 'return strtoupper($matches[1]);'),
-                $key
-            )
-        );
-        
-        return $key;
     }
     
     /**
@@ -103,7 +79,8 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
      * @return mixed
      * @throws ZendX_Service_Wordpress_Exception if unable to find method
      */
-    protected function __call($method, $params) {
+    protected function __call($method, $params)
+    {
         // Handle get<property> for members of $_data
         if (substr($method, 0, 3) == 'get') {
             $property = substr($method, 3);
@@ -113,7 +90,9 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         }
         
         include_once 'ZendX/Service/Wordpress/Exception.php';
-        throw new ZendX_Service_Wordpress_Exception('Invalid method "' . $method . '"');
+        throw new ZendX_Service_Wordpress_Exception(
+            'Invalid method "' . $method . '"'
+        );
     }
     
     /**
@@ -122,7 +101,8 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
      * @return mixed
      * @throws Zend_Service_Exception if unable to find key
      */
-    public function get($key) {
+    public function get($key)
+    {
         $keys = array($key);
         
         // Inflect key for possible matches (eg. BlogTitle => blog_title)
@@ -139,7 +119,9 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         }
         
         include_once 'ZendX/Service/Wordpress/Exception.php';
-        throw new ZendX_Service_Wordpress_Exception('Key "' . $key . '" not set in data.');
+        throw new ZendX_Service_Wordpress_Exception(
+            'Key "' . $key . '" not set in data.'
+        );
     }
     
     /**
@@ -160,8 +142,11 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
             $url = $this->getUrl();
         }
         
-        return sprintf('<a href="%s" title="%s">%s</a>', $url,
-                                                         $this->getTitle(),
-                                                         $this->getTitle());
+        return sprintf(
+            '<a href="%s" title="%s">%s</a>',
+            $url,
+            $this->getTitle(),
+            $this->getTitle()
+        );
     }
 }

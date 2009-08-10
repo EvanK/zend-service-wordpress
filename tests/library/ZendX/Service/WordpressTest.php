@@ -55,8 +55,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasData($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $blog->getData());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $blog->getData()
+        );
     }
     
     /**
@@ -64,8 +66,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTitle($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->get('blog_title'));
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->get('blog_title')
+        );
     }
     
     /**
@@ -73,8 +77,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTitleMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getTitle());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getTitle()
+        );
     }
     
     /**
@@ -82,8 +88,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTitleMagicMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getBlogTitle());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getBlogTitle()
+        );
     }
     
     /**
@@ -91,8 +99,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTagline($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->get('blog_tagline'));
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->get('blog_tagline')
+        );
     }
     
     /**
@@ -100,8 +110,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTaglineMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getTagline());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getTagline()
+        );
     }
     
     /**
@@ -109,8 +121,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTaglineMagicMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getBlogTagline());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getBlogTagline()
+        );
     }
     
     /**
@@ -118,8 +132,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasUrl($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->get('blog_url'));
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->get('blog_url')
+        );
     }
     
     /**
@@ -127,8 +143,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasUrlMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getUrl());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getUrl()
+        );
     }
     
     /**
@@ -136,8 +154,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasUrlMagicMethod($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getBlogUrl());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getBlogUrl()
+        );
     }
     
     /**
@@ -145,8 +165,7 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasLink($blog)
     {
-        $this->assertEquals(0,
-                            strpos($blog->getLink(), '<a'));
+        $this->assertEquals(0, strpos($blog->getLink(), '<a'));
     }
     
     /**
@@ -154,8 +173,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasDateFormat($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getDateFormat());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getDateFormat()
+        );
     }
     
     /**
@@ -163,8 +184,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogHasTimeFormat($blog)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $blog->getTimeFormat());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $blog->getTimeFormat()
+        );
     }
     
     /**
@@ -174,8 +197,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     {
         $posts = $blog->getRecentPosts();
         
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $posts);
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $posts
+        );
         
         $this->assertGreaterThan(1, count($posts));
         $this->assertLessThanOrEqual(10, count($posts));
@@ -186,10 +211,13 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $classTest    = array();
         foreach ($posts as $post) {
             array_push($classControl, 'ZendX_Service_Wordpress_Post');
-            array_push($classTest,    get_class($post));
+            array_push($classTest, get_class($post));
         }
-        $this->assertEquals(join(', ', $classControl),
-                            join(', ', $classTest));
+        
+        $this->assertEquals(
+            join(', ', $classControl),
+            join(', ', $classTest)
+        );
     }
     
     /**
@@ -199,8 +227,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     {
         $authors = $blog->getAuthors();
         
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $authors);
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $authors
+        );
         
         $this->assertGreaterThanOrEqual(1, count($authors));
         
@@ -210,10 +240,12 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $classTest    = array();
         foreach ($authors as $author) {
             array_push($classControl, 'ZendX_Service_Wordpress_Author');
-            array_push($classTest,    get_class($author));
+            array_push($classTest, get_class($author));
         }
-        $this->assertEquals(join(', ', $classControl),
-                            join(', ', $classTest));
+        $this->assertEquals(
+            join(', ', $classControl),
+            join(', ', $classTest)
+        );
     }
     
     /**
@@ -223,8 +255,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     {
         $categories = $blog->getCategories();
         
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $categories);
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $categories
+        );
         
         $this->assertGreaterThanOrEqual(1, count($categories));
         
@@ -232,10 +266,13 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $classTest    = array();
         foreach ($categories as $category) {
             array_push($classControl, 'ZendX_Service_Wordpress_Category');
-            array_push($classTest,    get_class($category));
+            array_push($classTest, get_class($category));
         }
-        $this->assertEquals(join(', ', $classControl),
-                            join(', ', $classTest));
+        
+        $this->assertEquals(
+            join(', ', $classControl),
+            join(', ', $classTest)
+        );
     }
     
     /**
@@ -245,8 +282,10 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
     {
         $tags = $blog->getTags();
         
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
-                          $tags);
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $tags
+        );
         
         $this->assertGreaterThanOrEqual(1, count($tags));
         
@@ -254,9 +293,12 @@ class ZendX_Service_WordpressTest extends PHPUnit_Framework_TestCase
         $classTest    = array();
         foreach ($tags as $tag) {
             array_push($classControl, 'ZendX_Service_Wordpress_Tag');
-            array_push($classTest,    get_class($tag));
+            array_push($classTest, get_class($tag));
         }
-        $this->assertEquals(join(', ', $classControl),
-                            join(', ', $classTest));
+        
+        $this->assertEquals(
+            join(', ', $classControl),
+            join(', ', $classTest)
+        );
     }
 }

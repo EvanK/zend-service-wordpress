@@ -45,8 +45,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasId($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getId());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getId()
+        );
     }
     
     /**
@@ -54,8 +56,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasTitle($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getTitle());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getTitle()
+        );
     }
     
     /**
@@ -63,8 +67,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasDescription($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getDescription());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getDescription()
+        );
     }
     
     /**
@@ -72,11 +78,15 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostDescriptionIsEquivalentToStringMagicMethod($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          (String) $post);
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            (String) $post
+        );
         
-        $this->assertEquals($post->getDescription(),
-                            (String) $post);
+        $this->assertEquals(
+            $post->getDescription(),
+            (String) $post
+        );
     }
     
     /**
@@ -84,8 +94,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasUrl($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getUrl());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getUrl()
+        );
     }
     
     /**
@@ -93,8 +105,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasLink($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getLink());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getLink()
+        );
         
         // Ensure link actually starts with a link
         $this->assertEquals(0, strpos($post->getLink(), '<a'));
@@ -105,8 +119,10 @@ class ZendX_Service_Wordpress_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasPermaLink($post)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $post->getPermaUrl());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $post->getPermaUrl()
+        );
         
         // Ensure link actually starts with a link
         $this->assertEquals(0, strpos($post->getPermaLink(), '<a'));

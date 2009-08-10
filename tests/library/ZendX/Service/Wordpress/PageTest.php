@@ -44,17 +44,33 @@ class ZendX_Service_Wordpress_PageTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testNormalizedKeys() {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $this->page->getDateCreated());
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $this->page->getWpAuthorDisplayName());
+    public function testNormalizedKeys()
+    {
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $this->page->getDateCreated()
+        );
+        
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $this->page->getWpAuthorDisplayName()
+        );
 
         $this->setExpectedException('Zend_Service_Exception');
         $this->page->getNoPossibleWayThisMethodWillExist();
         $this->fail('Did not throw expected service exception');
     }
     
-    public function testDefinedGetters() {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_NUMERIC, $this->page->getId());
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $this->page->getSlug());
+    public function testDefinedGetters()
+    {
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_NUMERIC,
+            $this->page->getId()
+        );
+        
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $this->page->getSlug()
+        );
     }
 }

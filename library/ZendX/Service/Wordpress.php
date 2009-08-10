@@ -80,13 +80,17 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     /**
      * Constructor
      *
-     * @param  string  $xmlRpcUrl XML-RPC URL, normally the blog URL plus 'xmlrpc.php'
+     * @param  string  $xmlRpcUrl XML-RPC URL (e.g. blog URL + 'xmlrpc.php')
      * @param  string  $username  Username
      * @param  string  $password  Password
-     * @param  string  $blogId    Blog id, only needed for multi-blog environments (hosted at wordpress.com or a Mu install)
-     * @param  boolean $caching   Whether to cache rpc calls for the life of the class
+     * @param  string  $blogId    Blog id, only needed for multi-blog
+     *                            environments (hosted at wordpress.com or a
+     *                            Mu install)
+     * @param  boolean $caching   Whether to cache rpc calls for the life of
+     *                            the class
      * @return void
-     * @throws Zend_Service_Exception if no blog id provided for a multi-blog environment
+     * @throws Zend_Service_Exception if no blog id provided for a
+     *                                multi-blog environment
      */
     public function __construct($xmlRpcUrl,
                                 $username,
@@ -127,6 +131,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
                 break;
             default:
                 $blog = array('blog_id' => $this->getBlogId());
+                break;
         }
         
         // Push blog identifier onto beginning of parameters
@@ -160,11 +165,13 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     {
         $this->setBlogId($id);
         
-        $options = $this->call('wp.getOptions', array(
-            'blog_id'   =>  $this->getBlogId(),
-            'username'  =>  $this->getUsername(),
-            'password'  =>  $this->getPassword()
-        ));
+        $options = $this->call(
+            'wp.getOptions', array(
+                'blog_id'   =>  $this->getBlogId(),
+                'username'  =>  $this->getUsername(),
+                'password'  =>  $this->getPassword()
+            )
+        );
         
         $data = array();
         
@@ -236,9 +243,13 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      */
     public function getRecentPosts($limit = 10)
     {
-        return $this->_getCallObjects('metaWeblog.getRecentPosts', 'post', array(
-            'numberOfPosts' =>  $limit
-        ));
+        return $this->_getCallObjects(
+            'metaWeblog.getRecentPosts',
+            'post',
+            array(
+                'numberOfPosts' =>  $limit
+            )
+        );
     }
     
     /**

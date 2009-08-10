@@ -45,8 +45,10 @@ class ZendX_Service_Wordpress_TagTest extends PHPUnit_Framework_TestCase
      */
     public function testTagHasId($tag)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $tag->getId());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $tag->getId()
+        );
     }
     
     /**
@@ -54,8 +56,10 @@ class ZendX_Service_Wordpress_TagTest extends PHPUnit_Framework_TestCase
      */
     public function testTagHasSlug($tag)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $tag->getSlug());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $tag->getSlug()
+        );
     }
     
     /**
@@ -63,8 +67,10 @@ class ZendX_Service_Wordpress_TagTest extends PHPUnit_Framework_TestCase
      */
     public function testTagHasName($tag)
     {
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $tag->getName());
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
+            $tag->getName()
+        );
     }
     
     /**
@@ -72,8 +78,10 @@ class ZendX_Service_Wordpress_TagTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthorNameIsEquivalentToStringMagicMethod($tag)
     {
-        $this->assertEquals($tag->getName(),
-                            (String) $tag);
+        $this->assertEquals(
+            $tag->getName(),
+            (String) $tag
+        );
     }
 }
 
