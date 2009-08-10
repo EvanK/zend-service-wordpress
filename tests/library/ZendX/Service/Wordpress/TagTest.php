@@ -1,10 +1,10 @@
 <?php
 /**
- * ZendX_Service_Wordpress_Author unit tests
+ * ZendX_Service_Wordpress_Tag unit tests
  *
  * @category   ZendX
  * @package    ZendX_Service_Wordpress
- * @subpackage AuthorTest
+ * @subpackage TagTest
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -21,11 +21,11 @@ require_once 'ZendX/Service/Wordpress.php';
 
 /**
  * @group Wordpress
- * @group Author
+ * @group Tag
  */
-class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
+class ZendX_Service_Wordpress_TagTest extends PHPUnit_Framework_TestCase
 {
-    public static function authorProvider()
+    public static function tagProvider()
     {
         try {
             $wordpress = new ZendX_Service_Wordpress(
@@ -37,43 +37,43 @@ class ZendX_Service_Wordpress_AuthorTest extends PHPUnit_Framework_TestCase
             $this->fail($e->getMessage());
         }
         
-        return array($wordpress->getBlog()->getAuthors());
+        return array($wordpress->getBlog()->getTags());
     }
     
     /**
-     * @dataProvider authorProvider
+     * @dataProvider tagProvider
      */
-    public function testAuthorHasId($author)
+    public function testTagHasId($tag)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getId());
+                          $tag->getId());
     }
     
     /**
-     * @dataProvider authorProvider
+     * @dataProvider tagProvider
      */
-    public function testAuthorHasLogin($author)
+    public function testTagHasSlug($tag)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getLogin());
+                          $tag->getSlug());
     }
     
     /**
-     * @dataProvider authorProvider
+     * @dataProvider tagProvider
      */
-    public function testAuthorHasName($author)
+    public function testTagHasName($tag)
     {
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING,
-                          $author->getName());
+                          $tag->getName());
     }
     
     /**
-     * @dataProvider authorProvider
+     * @dataProvider tagProvider
      */
-    public function testAuthorNameIsEquivalentToStringMagicMethod($author)
+    public function testAuthorNameIsEquivalentToStringMagicMethod($tag)
     {
-        $this->assertEquals($author->getName(),
-                            (String) $author);
+        $this->assertEquals($tag->getName(),
+                            (String) $tag);
     }
 }
 

@@ -41,7 +41,7 @@ class ZendX_Service_Wordpress_Post extends ZendX_Service_Wordpress_Abstract
     {
         return $this->getLink($this->getPermaUrl());
     }
-
+    
     public function __toString()
     {
         return $this->getDescription();
