@@ -15,25 +15,31 @@
 require_once 'ZendX/Service/Wordpress/Abstract.php';
 
 /**
- * @category   ZendX
- * @package    ZendX_Service_Wordpress
- * @subpackage Blog
+ * Wordpress authors
+ * @see ZendX_Service_Wordpress_Author
  */
+require_once 'ZendX/Service/Wordpress/Blog/Author.php';
+
+/**
+ * Wordpress posts
+ * @see ZendX_Service_Wordpress_Post
+ */
+require_once 'ZendX/Service/Wordpress/Blog/Post.php';
+
+/**
+ * Wordpress categories
+ * @see ZendX_Service_Wordpress_Category
+ */
+require_once 'ZendX/Service/Wordpress/Blog/Category.php';
+
+/**
+ * Wordpress tags
+ * @see ZendX_Service_Wordpress_Tag
+ */
+require_once 'ZendX/Service/Wordpress/Blog/Tag.php';
+
 class ZendX_Service_Wordpress_Blog extends ZendX_Service_Wordpress_Abstract
 {
-
-    /**
-     * Override default setData method, since wp.getOptions returns
-     * associative data instead of key/value pairs
-     */
-    public function setData($data = array())
-    {
-        foreach ($data as $key => $option) {
-            $data[$key] = $option['value'];
-        }
-        
-        return parent::setData($data);
-    }
 
     /**
      * @return Blog title

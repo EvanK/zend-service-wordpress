@@ -27,30 +27,6 @@ require_once 'ZendX/Service/Wordpress/Abstract.php';
  */
 require_once 'ZendX/Service/Wordpress/Blog.php';
 
-/**
- * Wordpress posts
- * @see ZendX_Service_Wordpress_Post
- */
-require_once 'ZendX/Service/Wordpress/Post.php';
-
-/**
- * Wordpress categories
- * @see ZendX_Service_Wordpress_Category
- */
-require_once 'ZendX/Service/Wordpress/Category.php';
-
-/**
- * Wordpress tags
- * @see ZendX_Service_Wordpress_Tag
- */
-require_once 'ZendX/Service/Wordpress/Tag.php';
-
-/**
- * Wordpress authors
- * @see ZendX_Service_Wordpress_Author
- */
-require_once 'ZendX/Service/Wordpress/Author.php';
-
 class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
 {
     /**
@@ -92,13 +68,24 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     {
         $this->setBlogId($id);
         
-        $blog = $this->_getCallObject(
-            'wp.getOptions', 'blog', array(
+        $data = $this->call(
+            'wp.getOptions', array(
                 'blog_id'   =>  $this->getBlogId(),
                 'username'  =>  $this->getUsername(),
                 'password'  =>  $this->getPassword()
             )
         );
+        
+        foreach ($data as $key => $option) {
+            $data[$key] = $option['value'];
+        }
+        
+        $blog = new ZendX_Service_Wordpress_Blog(
+            $this->getXmlRpcUrl(),
+            $this->getHttpClient()
+        );
+        
+        $blog->setData($data);
         
         return $blog;
     }

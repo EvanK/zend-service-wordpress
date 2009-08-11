@@ -210,7 +210,7 @@ class ZendX_Service_Wordpress_BlogTest extends PHPUnit_Framework_TestCase
         $classControl = array();
         $classTest    = array();
         foreach ($posts as $post) {
-            array_push($classControl, 'ZendX_Service_Wordpress_Post');
+            array_push($classControl, 'ZendX_Service_Wordpress_Blog_Post');
             array_push($classTest, get_class($post));
         }
         
@@ -239,7 +239,7 @@ class ZendX_Service_Wordpress_BlogTest extends PHPUnit_Framework_TestCase
         $classControl = array();
         $classTest    = array();
         foreach ($authors as $author) {
-            array_push($classControl, 'ZendX_Service_Wordpress_Author');
+            array_push($classControl, 'ZendX_Service_Wordpress_Blog_Author');
             array_push($classTest, get_class($author));
         }
         $this->assertEquals(
@@ -265,7 +265,7 @@ class ZendX_Service_Wordpress_BlogTest extends PHPUnit_Framework_TestCase
         $classControl = array();
         $classTest    = array();
         foreach ($categories as $category) {
-            array_push($classControl, 'ZendX_Service_Wordpress_Category');
+            array_push($classControl, 'ZendX_Service_Wordpress_Blog_Category');
             array_push($classTest, get_class($category));
         }
         
@@ -292,7 +292,7 @@ class ZendX_Service_Wordpress_BlogTest extends PHPUnit_Framework_TestCase
         $classControl = array();
         $classTest    = array();
         foreach ($tags as $tag) {
-            array_push($classControl, 'ZendX_Service_Wordpress_Tag');
+            array_push($classControl, 'ZendX_Service_Wordpress_Blog_Tag');
             array_push($classTest, get_class($tag));
         }
         

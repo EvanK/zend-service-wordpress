@@ -166,24 +166,6 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
     }
 
     /**
-     * Similar to _getCallObjects, but for a single object
-     */
-    protected function _getCallObject($method, $objectType, $params = array())
-    {
-        $data = $this->call($method, $params);
-        
-        // Define class name based on object type (Post, Tag, etc.)
-        $className = "ZendX_Service_Wordpress_" . ucfirst($objectType);
-        
-        // New class uses the same XML-RPC URL & HTTP Client as Wordpress
-        $object = new $className($this->getXmlRpcUrl(),
-                                 $this->getHttpClient());
-        $object->setData($data);
-        
-        return $object;
-    }
-
-    /**
      * Facilitates redundant XML-RPC calls that get converted into subclasses
      */
     protected function _getCallObjects($method, $objectType, $params = array())
@@ -191,7 +173,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         $results = $this->call($method, $params);
         
         // Define class name based on object type (Post, Tag, etc.)
-        $className = "ZendX_Service_Wordpress_" . ucfirst($objectType);
+        $className = "ZendX_Service_Wordpress_Blog_" . ucfirst($objectType);
         
         $objects = array();
         foreach ($results as $data) {
