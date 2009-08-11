@@ -91,11 +91,28 @@ class ZendX_Service_Wordpress_Blog extends ZendX_Service_Wordpress_Abstract
 
     /**
      * Return all of the categories on the site
-     * @return array ZendX_Service_Wordpress_Categories
+     * @return array ZendX_Service_Wordpress_Category
      */
     public function getCategories()
     {
         return $this->_getCallObjects('wp.getCategories', 'category');
+    }
+
+    /**
+     * Return a specific category by name
+     * return ZendX_Service_Wordpress_Category category
+     */
+    public function getCategory($name)
+    {
+        $categories = $this->getCategories();
+        
+        foreach ($categories as $category) {
+            if ($name === $category->getName()) {
+                return $category;
+            }
+        }
+        
+        return false;
     }
 
     /**

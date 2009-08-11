@@ -1,5 +1,5 @@
 <phpunit>
-    <testsuite name="My Test Suite">
+    <testsuite name="ZendX_Service_Wordpress">
         <directory>./</directory>
     </testsuite>
 

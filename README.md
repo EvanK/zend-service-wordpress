@@ -2,6 +2,7 @@
 [twitter]: http://framework.zend.com/manual/en/zend.service.twitter.html "Zend_Service_Twitter"
 [xmlrpc]: http://codex.wordpress.org/XML-RPC_wp "WordPress XML-RPC"
 [phpunit]: http://www.phpunit.de/manual/current/en/installation.html "PHPUnit Installation"
+[phpcs]: http://pear.php.net/package/PHP_CodeSniffer "PHP CodeSniffer"
 
 # ZendX\_Service\_Wordpress
 
@@ -113,4 +114,12 @@ subset of tests for just `Blog`, `Post`, `Category`, `Author`, or `Tag`), simply
     # phpunit --group Blog
     # phpunit --group Post
     etc...
+    
+## Code Sniffing
+
+You can run [PHP CodeSniffer][phpcs] to ensure your markup follows the *Zend* standard
+by running:
+    
+    # cd zend-service-wordpress
+    # phpcs --report=full --standard=Zend .
     

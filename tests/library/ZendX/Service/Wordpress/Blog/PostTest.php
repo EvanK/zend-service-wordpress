@@ -40,6 +40,26 @@ class ZendX_Service_Wordpress_Blog_PostTest extends PHPUnit_Framework_TestCase
         return array($wordpress->getBlog()->getRecentPosts(1));
     }
 
+    public static function categoryProvider()
+    {
+        try {
+            $wordpress = new ZendX_Service_Wordpress(
+                TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+                TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
+                TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
+            );
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
+        
+        $posts = $wordpress->getBlog()->getRecentPosts(1);
+        $post = $posts[0];
+        
+        return array(
+            $post->getCategories()
+        );
+    }
+
     /**
      * @dataProvider postProvider
      */
@@ -133,7 +153,27 @@ class ZendX_Service_Wordpress_Blog_PostTest extends PHPUnit_Framework_TestCase
      */
     public function testPostHasCategories($post)
     {
-        $this->markTestIncomplete('Missing post categories test');
+        $categories = $post->get('categories');
+        $categoryObjects = $post->getCategories();
+        
+        $this->assertType(
+            PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $categoryObjects
+        );
+        
+        $this->assertEquals(
+            count($categories),
+            count($categoryObjects)
+        );
+        
+        // Category objects should be in the same order as
+        // the category names
+        foreach ($categoryObjects as $index => $category) {
+            $this->assertEquals(
+                $categories[$index],
+                $category->getName()
+            );
+        }
     }
-
+    
 }
