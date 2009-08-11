@@ -79,5 +79,49 @@ class ZendX_Service_Wordpress_XmlRpc_ClientTest extends PHPUnit_Framework_TestCa
             (bool) $blog->getXmlRpcClient()->getCaching()
         );
     }
-    
+
+    public function testXmlRpcClientInstancesAreSeparate()
+    {
+        $before = new ZendX_Service_Wordpress(
+            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+            'foo',
+            'bar'
+        );
+        
+        $after = new ZendX_Service_Wordpress(
+            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+            'baz',
+            'bedazzle'
+        );
+        
+        $this->assertNotEquals(
+            $before->getXmlRpcClient()->getUsername(),
+            $after->getXmlRpcClient()->getUsername()
+        );
+        
+        $this->assertNotEquals(
+            $before->getXmlRpcClient()->getPassword(),
+            $after->getXmlRpcClient()->getPassword()
+        );
+        
+        $this->assertEquals(
+            'foo',
+            $before->getXmlRpcClient()->getUsername()
+        );
+        
+        $this->assertEquals(
+            'baz',
+            $after->getXmlRpcClient()->getUsername()
+        );
+        
+        $this->assertEquals(
+            'bar',
+            $before->getXmlRpcClient()->getPassword()
+        );
+        
+        $this->assertEquals(
+            'bedazzle',
+            $after->getXmlRpcClient()->getPassword()
+        );
+    }
 }

@@ -29,9 +29,6 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
      * @param  string  $xmlRpcUrl XML-RPC URL (e.g. blog URL + 'xmlrpc.php')
      * @param  string  $username  Username
      * @param  string  $password  Password
-     * @param  string  $blogId    Blog id, only needed for multi-blog
-     *                            environments (hosted at wordpress.com or a
-     *                            Mu install)
      * @param  boolean $caching   Whether to cache rpc calls for the life of
      *                            the class
      * @return void
@@ -43,37 +40,29 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
                                 $password,
                                 $caching = true)
     {
-        $this->setXmlRpcUrl($xmlRpcUrl)
-             ->setUsername($username)
-             ->setPassword($password);
-        
-        $this->getXmlRpcClient()->setCaching($caching)
-                                ->setSkipSystemLookup();
+        $client = $this->getXmlRpcClient($xmlRpcUrl);
+        $client->setUsername($username)
+               ->setPassword($password)
+               ->setCaching($caching)
+               ->setSkipSystemLookup();
     }
 
     /**
      * Retrieves blog information for specified blog
-     * @var integer (Defaults to 0) $id 
+     * @param  string  id   Blog id, only needed for multi-blog
+     *                      environments (hosted at wordpress.com or a Mu install)
      * @return ZendX_Service_Wordpress_Abstract
      */
     public function getBlog($id = 0)
     {
-        $this->setBlogId($id);
-        
-        $data = $this->getXmlRpcClient()->call(
-            'wp.getOptions', array(
-                'blog_id'   =>  $this->getBlogId(),
-                'username'  =>  $this->getUsername(),
-                'password'  =>  $this->getPassword()
-            )
-        );
+        $client = $this->getXmlRpcClient()->setBlogId($id);
+        $data = $client->callWithCredentials('wp.getOptions');
         
         foreach ($data as $key => $option) {
             $data[$key] = $option['value'];
         }
         
-        $blog = new ZendX_Service_Wordpress_Blog();
-        
+        $blog = new ZendX_Service_Wordpress_Blog($client);
         $blog->setData($data);
         
         return $blog;
