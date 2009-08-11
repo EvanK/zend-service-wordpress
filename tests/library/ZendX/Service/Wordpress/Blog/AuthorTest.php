@@ -27,15 +27,11 @@ class ZendX_Service_Wordpress_Blog_AuthorTest extends PHPUnit_Framework_TestCase
 {
     public static function authorProvider()
     {
-        try {
-            $wordpress = new ZendX_Service_Wordpress(
-                TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
-                TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
-                TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
-            );
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $wordpress = new ZendX_Service_Wordpress(
+            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+            TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
+            TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
+        );
         
         return array($wordpress->getBlog()->getAuthors());
     }
@@ -84,4 +80,3 @@ class ZendX_Service_Wordpress_Blog_AuthorTest extends PHPUnit_Framework_TestCase
         );
     }
 }
-

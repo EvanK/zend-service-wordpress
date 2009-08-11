@@ -27,15 +27,11 @@ class ZendX_Service_Wordpress_Blog_PostTest extends PHPUnit_Framework_TestCase
 
     public static function postProvider()
     {
-        try {
-            $wordpress = new ZendX_Service_Wordpress(
-                TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
-                TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
-                TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
-            );
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $wordpress = new ZendX_Service_Wordpress(
+            TESTS_ZENDX_SERVICE_WORDPRESS_XMLRPC_URL,
+            TESTS_ZENDX_SERVICE_WORDPRESS_USERNAME,
+            TESTS_ZENDX_SERVICE_WORDPRESS_PASSWORD
+        );
         
         return array($wordpress->getBlog()->getRecentPosts(1));
     }

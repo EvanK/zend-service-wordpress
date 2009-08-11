@@ -19,7 +19,7 @@ require_once 'Zend/XmlRpc/Client.php';
  */
 require_once 'Zend/Filter/Inflector.php';
 
-abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
+abstract class ZendX_Service_Wordpress_Abstract
 {
 
     /**
@@ -53,6 +53,11 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
     protected static $_caching;
 
     /**
+     * XML-RPC Client
+     * @var Zend_XmlRpc_Client
+     */
+    protected static $_xmlRpcClient;
+    /**
      * Object data
      * @var array
      */
@@ -64,18 +69,13 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
     protected $_inflectors = array();
 
     /**
-     * Constructor
+     * Constructor to initialize inflectors for getting data
      *
-     * @param  ZendX_Service_Wordpress $parent
-     * @param  array $data
      * @return void
-     * @throws ZendX_Service_Wordpress_Exception
      */
-    public function __construct($server, Zend_Http_Client $httpClient = null)
+    public function __construct()
     {
         $this->_initInflectors();
-        
-        parent::__construct($server, $httpClient);
     }
 
     protected function _initInflectors()
@@ -162,7 +162,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         $params = array_merge($blog, $params);
         
         // Call requested service
-        return parent::call("$service.$action", $params);
+        return $this->getXmlRpcClient()->call("$service.$action", $params);
     }
 
     /**
@@ -178,8 +178,7 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         $objects = array();
         foreach ($results as $data) {
             // New class uses the same XML-RPC URL & HTTP Client as Wordpress
-            $object = new $className($this->getXmlRpcUrl(),
-                                     $this->getHttpClient());
+            $object = new $className();
             $object->setData($data);
             
             array_push($objects, $object);
@@ -225,6 +224,20 @@ abstract class ZendX_Service_Wordpress_Abstract extends Zend_XmlRpc_Client
         return self::$_xmlRpcUrl;
     }
 
+    /**
+     * @return Zend_XmlRpc_Client XML-RPC Client
+     */
+    public function getXmlRpcClient()
+    {
+        if (null == self::$_xmlRpcClient) {
+            $client = new Zend_XmlRpc_Client($this->getXmlRpcUrl());
+            $client->setSkipSystemLookup();
+            
+            self::$_xmlRpcClient = $client;
+        }
+        
+        return self::$_xmlRpcClient;
+    }
     /**
      * Retrieve all data
      * @return array

@@ -19,7 +19,7 @@ require_once 'ZendX/Service/Wordpress/Abstract.php';
  * @package    ZendX_Service_Wordpress
  * @subpackage Page
  */
-class ZendX_Service_Wordpress_Blog_Page extends ZendX_Service_Wordpress_Abstract
+class ZendX_Service_Wordpress_Blog_Page extends ZendX_Service_Wordpress_Blog
 {
 
     /**

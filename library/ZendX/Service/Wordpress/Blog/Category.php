@@ -14,7 +14,7 @@
  */
 require_once 'ZendX/Service/Wordpress/Abstract.php';
 
-class ZendX_Service_Wordpress_Blog_Category extends ZendX_Service_Wordpress_Abstract
+class ZendX_Service_Wordpress_Blog_Category extends ZendX_Service_Wordpress_Blog
 {
     public function getId()
     {

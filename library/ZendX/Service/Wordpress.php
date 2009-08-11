@@ -52,11 +52,10 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
         $this->setXmlRpcUrl($xmlRpcUrl)
              ->setUsername($username)
              ->setPassword($password)
-             ->setCaching($caching)
-             ->setSkipSystemLookup();
+             ->setCaching($caching);
         
         // Setup Zend_XmlRpc_Client
-        parent::__construct($xmlRpcUrl);
+        // parent::__construct($xmlRpcUrl);
     }
 
     /**
@@ -68,7 +67,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     {
         $this->setBlogId($id);
         
-        $data = $this->call(
+        $data = $this->getXmlRpcClient()->call(
             'wp.getOptions', array(
                 'blog_id'   =>  $this->getBlogId(),
                 'username'  =>  $this->getUsername(),
@@ -80,10 +79,7 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
             $data[$key] = $option['value'];
         }
         
-        $blog = new ZendX_Service_Wordpress_Blog(
-            $this->getXmlRpcUrl(),
-            $this->getHttpClient()
-        );
+        $blog = new ZendX_Service_Wordpress_Blog();
         
         $blog->setData($data);
         
