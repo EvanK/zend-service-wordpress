@@ -15,6 +15,12 @@
 require_once 'ZendX/Service/Wordpress/Abstract.php';
 
 /**
+ * XML-RPC Client
+ * @see Zend_XmlRpc_Client
+ */
+require_once 'Zend/XmlRpc/Client.php';
+
+/**
  * Wordpress authors
  * @see ZendX_Service_Wordpress_Author
  */

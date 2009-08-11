@@ -10,12 +10,6 @@
  */
 
 /**
- * XML-RPC Client
- * @see Zend_XmlRpc_Client
- */
-require_once 'Zend/XmlRpc/Client.php';
-
-/**
  * Wordpress Abstract
  * @see ZendX_Service_Wordpress_Abstract
  */
@@ -51,11 +45,10 @@ class ZendX_Service_Wordpress extends ZendX_Service_Wordpress_Abstract
     {
         $this->setXmlRpcUrl($xmlRpcUrl)
              ->setUsername($username)
-             ->setPassword($password)
-             ->setCaching($caching);
+             ->setPassword($password);
         
-        // Setup Zend_XmlRpc_Client
-        // parent::__construct($xmlRpcUrl);
+        $this->getXmlRpcClient()->setCaching($caching)
+                                ->setSkipSystemLookup();
     }
 
     /**
