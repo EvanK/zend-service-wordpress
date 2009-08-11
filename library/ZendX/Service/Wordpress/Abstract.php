@@ -10,9 +10,9 @@
  */
 
 /**
- * @see ZendX_Service_Wordpress
+ * @see ZendX_Service_Wordpress_XmlRpc_Client
  */
-require_once 'Zend/XmlRpc/Client.php';
+require_once 'ZendX/Service/Wordpress/XmlRpc/Client.php';
 
 /**
  * @see Zend_Filter_Inflector
@@ -45,12 +45,6 @@ abstract class ZendX_Service_Wordpress_Abstract
      * @var string _password
      */
     protected static $_password;
-
-    /**
-     * Whether or not caching is enabled
-     * @var boolean _caching
-     */
-    protected static $_caching;
 
     /**
      * XML-RPC Client
@@ -225,13 +219,12 @@ abstract class ZendX_Service_Wordpress_Abstract
     }
 
     /**
-     * @return Zend_XmlRpc_Client XML-RPC Client
+     * @return ZendX_Service_Wordpress_XmlRpc_Client XML-RPC Client
      */
     public function getXmlRpcClient()
     {
         if (null == self::$_xmlRpcClient) {
-            $client = new Zend_XmlRpc_Client($this->getXmlRpcUrl());
-            $client->setSkipSystemLookup();
+            $client = new ZendX_Service_Wordpress_XmlRpc_Client($this->getXmlRpcUrl());
             
             self::$_xmlRpcClient = $client;
         }
@@ -254,7 +247,7 @@ abstract class ZendX_Service_Wordpress_Abstract
     {
         return self::$_username;
     }
-    
+
     /**
      * @return Password
      */
@@ -286,17 +279,6 @@ abstract class ZendX_Service_Wordpress_Abstract
     public function getBlogId()
     {
         return self::$_blogId;
-    }
-
-    /**
-     * Enable/Disable caching
-     * @return ZendX_Service_Wordpress
-     */
-    public function setCaching($caching)
-    {
-        self::$_caching = $caching;
-        
-        return $this;
     }
 
     /**
@@ -340,6 +322,5 @@ abstract class ZendX_Service_Wordpress_Abstract
     {
         self::$_blogId = $id;
     }
-    
 
 }
