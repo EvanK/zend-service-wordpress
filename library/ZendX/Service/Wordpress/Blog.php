@@ -72,18 +72,45 @@ class ZendX_Service_Wordpress_Blog extends ZendX_Service_Wordpress_Abstract
     }
 
     /**
-     * Return recent posts
-     * @var integer (Defaults to 10) limit
+     * Return all of the posts on the site
+     * @return array ZendX_Service_Wordpress_Blog_Post
      */
-    public function getRecentPosts($limit = 10)
-    {
+    public function getPosts() {
         return $this->_getCallObjects(
             'metaWeblog.getRecentPosts',
             'post',
             array(
-                'numberOfPosts' =>  $limit
+                'numberOfPosts' => 65536
             )
         );
+    }
+
+    /**
+     * Return a specific post by slug
+     * @param string $slug
+     * @return ZendX_Service_Wordpress_Blog_Post
+     */
+    public function getPost($slug) {
+        $posts = $this->getPosts();
+        
+        foreach ($posts as $post) {
+            if ($slug === $post->getSlug()) {
+                return $post;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Return recent posts
+     * @param integer $limit Defaults to 10
+     * @param integer $start Defaults to 0
+     */
+    public function getRecentPosts($limit = 10, $start = 0)
+    {
+        $posts = $this->getPosts();
+        return array_splice($posts, $start, $limit);
     }
 
     /**
