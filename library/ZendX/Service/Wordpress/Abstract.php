@@ -85,7 +85,7 @@ abstract class ZendX_Service_Wordpress_Abstract
      * @return mixed
      * @throws ZendX_Service_Wordpress_Exception if unable to find method
      */
-    protected function __call($method, $params)
+    public function __call($method, $params)
     {
         // Handle get<property> for members of $_data
         if (substr($method, 0, 3) == 'get') {
