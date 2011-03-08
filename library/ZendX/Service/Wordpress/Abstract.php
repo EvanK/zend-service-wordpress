@@ -89,8 +89,7 @@ abstract class ZendX_Service_Wordpress_Abstract
     {
         // Handle get<property> for members of $_data
         if (substr($method, 0, 3) == 'get') {
-            $property = substr($method, 3);
-            $property{0} = strtolower($property{0});
+            $property = lcfirst(substr($method, 3));
             
             return $this->get($property);
         }
