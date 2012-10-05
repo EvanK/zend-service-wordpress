@@ -187,19 +187,39 @@ abstract class ZendX_Service_Wordpress_Abstract
 
     /**
      * @return XHTML link to the object
+     *
+     * @link http://www.w3.org/TR/html-markup/a.html
      */
-    public function getLink($url = null)
+    public function getLink($url = null, $params = array())
     {
         if (null === $url) {
             $url = $this->getUrl();
         }
-        
-        return sprintf(
-            '<a href="%s" title="%s">%s</a>',
-            $url,
-            $this->getTitle(),
-            $this->getTitle()
-        );
-    }
 
+		/**
+		 * Attributes
+		 * @link http://www.w3.org/TR/html-markup/global-attributes.html
+		 */
+		$prop	= '';
+		$params	= empty($params) ? array('rel' => 'permalink') : (array) $params;
+		extract($params);
+		$attrs	= compact(	'accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 
+							'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 
+							'tabindex', 'target', 'rel', 'hreflang', 'media', 'type');
+
+		// String attrs ($prop)
+		if ( isset($attrs) && !empty($attrs) ) {
+			$prop	= ' ';
+			foreach ( $attrs as $attr => $value ) 
+				$prop	.= "{$attr}=\"{$value}\"";
+		}
+
+		return sprintf(
+			'<a href="%s" title="%s"%s>%s</a>', 
+			$url, 
+			$this->getTitle(), 
+			$prop, 
+			$this->getTitle(), 
+		);
+    }
 }
